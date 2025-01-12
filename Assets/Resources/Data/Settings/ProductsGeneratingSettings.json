@@ -1,0 +1,79 @@
+﻿{
+  "ProductsSettingsByGenres": [
+    {
+      "Genre": 1,
+      "Names": [
+        "Jump Frenzy",
+        "Tap Dash",
+        "Bounce Mania",
+        "Quick Swipe",
+        "Color Rush",
+        "Pixel Jumper",
+        "Tilt Rush",
+        "Stack Builder",
+        "Roller Madness",
+        "Swipe Hero",
+        "Circle Runner",
+        "Jumping Jelly",
+        "Slide Puzzle",
+        "Dash Master",
+        "Tappy Tower",
+        "Swipe Smash",
+        "Color Splash",
+        "Flip Mania",
+        "Doodle Runner",
+        "Speed Tapper"
+      ]
+    },
+    {
+      "Genre": 2,
+      "Names": [
+        "Empire Builder",
+        "War Tactician",
+        "Kingdom Conqueror",
+        "Battlefield Commander",
+        "Resource Master",
+        "Tower Defender",
+        "Civ Architect",
+        "Galactic Commander",
+        "Strategic Planner",
+        "Warrior's Mind",
+        "Diplomacy Master",
+        "Tactical Warfare",
+        "Civilization Ruler",
+        "King's Gambit",
+        "Supply Chain Strategist",
+        "Defensive Genius",
+        "Conquest Lord",
+        "Map Conqueror",
+        "World Planner",
+        "Strategem Overlord"
+      ]
+    },
+    {
+      "Genre": 3,
+      "Names": [
+        "Speed Track",
+        "Nitro Drift",
+        "Turbo Challenge",
+        "Offroad Kings",
+        "Velocity X",
+        "Race Storm",
+        "Asphalt Burn",
+        "Track Dominator",
+        "Circuit Racer",
+        "Adrenaline Rush",
+        "Drag Heroes",
+        "Street Kings",
+        "Trail Blazer",
+        "Thunder Wheels",
+        "Road Legends",
+        "High-Speed Pursuit",
+        "Overdrive Mania",
+        "Checkpoint Fury",
+        "Racer Xtreme",
+        "Full Throttle"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "Salaries": [
+    {
+      "CharacterSkill": 1,
+      "SalaryRange": {
+        "x": 1000,
+        "y": 2000
+      },
+      "AgeRange": {
+        "x": 18,
+        "y": 25
+      }
+    },
+    {
+      "CharacterSkill": 2,
+      "SalaryRange": {
+        "x": 2000,
+        "y": 3000
+      },
+      "AgeRange": {
+        "x": 26,
+        "y": 35
+      }
+    },
+    {
+      "CharacterSkill": 3,
+      "SalaryRange": {
+        "x": 3000,
+        "y": 4000
+      },
+      "AgeRange": {
+        "x": 36,
+        "y": 45
+      }
+    },
+    {
+      "CharacterSkill": 4,
+      "SalaryRange": {
+        "x": 4000,
+        "y": 5000
+      },
+      "AgeRange": {
+        "x": 46,
+        "y": 55
+      }
+    }
+  ],
+  "Names": [
+    "azukki",
+    "Alice",
+    "Bob",
+    "Sophia",
+    "Michael",
+    "Emma",
+    "Ethan",
+    "Olivia",
+    "Liam",
+    "Charlotte",
+    "James",
+    "Amelia",
+    "Benjamin",
+    "Mia",
+    "Lucas",
+    "Harper"
+  ]
+}

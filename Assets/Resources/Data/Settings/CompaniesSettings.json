@@ -1,0 +1,50 @@
+﻿{
+  "GeneratedCount": 10,
+  "Names": [
+    "TechNova",
+    "InnovaCorp",
+    "FutureWorks",
+    "EcoSphere",
+    "QuantumLeap",
+    "AeroDynamics",
+    "NeuralNetics",
+    "BioCore",
+    "HyperFusion",
+    "Visionary Labs"
+  ],
+  "ProductNames": [
+    "Smart AI Assistant",
+    "Eco-Friendly Battery",
+    "Quantum Processor",
+    "Autonomous Drone",
+    "Virtual Reality Headset",
+    "NextGen Smartphone",
+    "Cloud Storage Solution",
+    "CyberSecurity Shield",
+    "Renewable Energy Panel",
+    "3D Printing Tool"
+  ],
+  "CompanySettingsByTier": [
+    {
+      "CompanyTier": 1,
+      "EmployeesCount": { "x": 5, "y": 15 },
+      "EmployeeSalary": { "x": 30000, "y": 50000 },
+      "ProductsCountRange": { "x": 1, "y": 3 },
+      "ProductIncomeRange": { "x": 1000, "y": 5000 }
+    },
+    {
+      "CompanyTier": 3,
+      "EmployeesCount": { "x": 20, "y": 50 },
+      "EmployeeSalary": { "x": 50000, "y": 80000 },
+      "ProductsCountRange": { "x": 2, "y": 5 },
+      "ProductIncomeRange": { "x": 5000, "y": 15000 }
+    },
+    {
+      "CompanyTier": 2,
+      "EmployeesCount": { "x": 10, "y": 25 },
+      "EmployeeSalary": { "x": 40000, "y": 70000 },
+      "ProductsCountRange": { "x": 2, "y": 4 },
+      "ProductIncomeRange": { "x": 3000, "y": 8000 }
+    }
+  ]
+}
