@@ -13,5 +13,6 @@ namespace Mechanics.Income
 
         event Action<float> OnPlayerBalanceChanged;
         event Action OnMyPlayerIncomeChanged;
+        void ManualUpdateIncome(string characterKey);
     }
 }

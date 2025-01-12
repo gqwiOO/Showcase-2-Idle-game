@@ -3,7 +3,7 @@ using Mechanics.CompaniesRating.Data;
 
 namespace Mechanics.CompaniesRating.Json
 {
-    public class CompaniesGeneratingSettingsJsonStorage: BaseJsonStorage<CompaniesGeneratingSettings>
+    public class CompaniesGeneratingSettingsJsonStorage: BaseJsonResourcesStorage<CompaniesGeneratingSettings>
     {
         public override string Path
         {

@@ -3,7 +3,7 @@ using Mechanics.Product;
 
 namespace Mechanics.Characters
 {
-    public interface ICharactersService : IService
+    public interface ICharactersService : IService, IGameSaveDependent
     {
         void AddProductToCharacter(string characterKey, IProductData productData);
         void AddProductToCharacter(ICharacterData character, IProductData productData);

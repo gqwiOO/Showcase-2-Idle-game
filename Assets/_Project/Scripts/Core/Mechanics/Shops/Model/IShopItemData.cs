@@ -1,4 +1,4 @@
-﻿namespace Core.Mechanics.Shops.Model
+﻿namespace Core.Mechanics.Shops
 {
     public interface IShopItemData
     {

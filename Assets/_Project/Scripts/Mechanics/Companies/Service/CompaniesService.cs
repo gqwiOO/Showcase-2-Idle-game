@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Mechanics.Characters;
+using Mechanics.GameSave;
 using Zenject;
 
 namespace Mechanics.Companies
@@ -20,6 +22,19 @@ namespace Mechanics.Companies
             _companiesProvider = companiesProvider;
         }
 
+        public async Task Init()
+        {
+            
+        }
+
+        public void InjectGameSave(GameData gameSave)
+        {
+            foreach (var gameSaveCompany in gameSave.Companies)
+            {
+                _companiesProvider.AddCompany(gameSaveCompany);
+            }
+        }
+
         public ICompanyData CreateCompany(CompanyCreateData companyCreateData)
         {
             ICharacterData owner = _charactersProvider.GetCharacterByKey(companyCreateData.OwnerKey);
@@ -36,7 +51,7 @@ namespace Mechanics.Companies
 
         public void AddEmployeeToCompany(ICharacterData characterData, string companyKey)
         {
-            var companyData = _companiesProvider.GetCompanyByOwnerKey(companyKey);
+            var companyData = _companiesProvider.GetCompanyByKey(companyKey);
             if (companyData == null)
                 return;
             

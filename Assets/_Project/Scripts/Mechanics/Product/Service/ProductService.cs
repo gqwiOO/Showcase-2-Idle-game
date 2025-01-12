@@ -5,7 +5,10 @@ using Core.Scripts.Extension.System;
 using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.GameSave;
+using Mechanics.Income;
 using Mechanics.Product.JSON;
+using Mechanics.Product.Provider;
 using UnityEngine;
 using Zenject;
 
@@ -20,15 +23,20 @@ namespace Mechanics.Product
         public event Action<IGameProductData> OnGameProductDeveloped;
 
         private List<IProductData> _productsInDevelopingStatus = new ();
-        
-        
+        private IProductsProvider _productsProvider;
+        private IGameEconomyService _gameEconomyService;
+
+
         //TODO: Remote
         private const int _baseDevelopTime = 60;
         
 
         [Inject]
-        private void Construct(ICharactersProvider charactersProvider)
+        private void Construct(ICharactersProvider charactersProvider, IProductsProvider productsProvider,
+            IGameEconomyService gameEconomyService)
         {
+            _gameEconomyService = gameEconomyService;
+            _productsProvider = productsProvider;
             _charactersProvider = charactersProvider;
         }
 
@@ -36,6 +44,16 @@ namespace Mechanics.Product
         {
             _jsonNamesStorage = new ProductNamesJsonStorage();
             _jsonNamesStorage.Load();
+        }
+
+        public void InjectGameSave(GameData gameSave)
+        {
+            foreach (var gameSaveProduct in gameSave.Products)
+            {
+                _productsProvider.AddProduct(gameSaveProduct);
+                if(gameSaveProduct.ProductState == ProductState.Developing)
+                    StartDevelopingGameProduct(gameSaveProduct);
+            }
         }
 
         public void CreateGameProduct(CreateGameProductData createGameProductData, string Owner)
@@ -48,9 +66,11 @@ namespace Mechanics.Product
             // else 
                 // TODO: Add product to player's company
 
+            _productsProvider.AddProduct(productData);
             OnNewGameProductAdded?.Invoke(productData);
             
             AddDevProductsToDevelopers(productData);
+            
             StartDevelopingGameProduct(productData);
         }
 
@@ -59,6 +79,7 @@ namespace Mechanics.Product
             foreach (var developer in productData.DevelopingData.Developers)
                 developer.AddDevelopmentProduct(productData.Key);
         }
+
         private void RemoveDevProductsToDevelopers(IGameProductData productData)
         {
             foreach (var developer in productData.DevelopingData.Developers)
@@ -83,6 +104,7 @@ namespace Mechanics.Product
 
             RemoveDevProductsToDevelopers(productData);
             productData.ReleaseProduct();
+            _gameEconomyService.ManualUpdateIncome(_charactersProvider.GetMyCharacter().Key);
         }
 
         private float GetDevelopingSpeedInSeconds(IGameProductData productData)

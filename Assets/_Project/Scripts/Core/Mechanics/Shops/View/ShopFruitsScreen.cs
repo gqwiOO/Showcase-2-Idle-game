@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Core.Mechanics.Shops.Asset;
-using Core.Mechanics.Shops.Example;
-using Core.Mechanics.Shops.Provider;
 using Core.Scripts.Pools;
 using Core.Storage.Bank;
 using Cysharp.Threading.Tasks;

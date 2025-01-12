@@ -60,8 +60,11 @@ namespace Core.Storage.JsonStorage
             Debugging.Log(this,$"Data saved successfully at {fullPath}.");
         }
 
-        protected virtual string GetFullPath() 
-            => System.IO.Path.Combine(Application.persistentDataPath, Path + ".json");
+        protected virtual string GetFullPath()
+        {
+            string sanitizedPath = Path.TrimStart('/');
+            return System.IO.Path.Combine(Application.persistentDataPath, sanitizedPath + ".json");
+        }
     }
 
     public abstract class BaseJsonResourcesStorage<TData> : BaseJsonStorage<TData>

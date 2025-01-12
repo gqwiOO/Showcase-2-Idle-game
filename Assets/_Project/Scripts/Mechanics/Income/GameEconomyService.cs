@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Mechanics.Shops.Provider;
+using Core.Mechanics.Shops;
 using Core.Scripts.Debugging;
 using Core.Scripts.Services.UpdateService;
 using Core.Storage.Bank;
@@ -33,6 +33,7 @@ namespace Mechanics.Income
         private IProductsProvider _productsProvider;
 
         public event Action OnMyPlayerIncomeChanged;
+
         public event Action<float> OnPlayerBalanceChanged;
 
         public UpdateType UpdateType => UpdateType.Update;
@@ -91,6 +92,11 @@ namespace Mechanics.Income
                 CalculateCompanyIncomePerMonth(companyKey);
                 return _companiesIncomes[companyKey];
             }
+        }
+
+        public void ManualUpdateIncome(string characterKey)
+        {
+            CalculateCharacterIncomePerMonth(_charactersProvider.GetCharacterByKey(characterKey));
         }
 
         private void CalculateCompanyIncomePerMonth(string companyKey)

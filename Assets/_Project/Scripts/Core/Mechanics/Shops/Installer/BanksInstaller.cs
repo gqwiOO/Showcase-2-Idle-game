@@ -1,7 +1,6 @@
-﻿using Core.Mechanics.Shops.Provider;
-using Zenject;
+﻿using Zenject;
 
-namespace Core.Mechanics.Shops.Installer
+namespace Core.Mechanics.Shops
 {
     public class BanksInstaller: MonoInstaller
     {

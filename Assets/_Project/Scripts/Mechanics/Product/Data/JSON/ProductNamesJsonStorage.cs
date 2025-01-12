@@ -2,7 +2,7 @@
 
 namespace Mechanics.Product.JSON
 {
-    public class ProductNamesJsonStorage: BaseJsonStorage<GameNames>
+    public class ProductNamesJsonStorage: BaseJsonResourcesStorage<GameNames>
     {
         public override string Path { get; } = "Data/Games/GameNames";
     }

@@ -10,6 +10,7 @@ namespace Mechanics.Characters
     {
         private ICharactersProvider _charactersProvider;
         private ICompaniesProvider _companiesProvider;
+
         private IGameSaveService _gameSaveService;
 
         [Inject]
@@ -28,9 +29,15 @@ namespace Mechanics.Characters
             {
                 var characterData = new CharacterData("l2fx6", 18, RoleType.Developer, 0, string.Empty,
                     CharacterSkill.Expert);
-                characterData.AddProduct(new GameProductData("TestProduct", "Clash of Clans", 500, GameGenre.Strategy,
-                    ProductState.Released).Key);
                 _charactersProvider.AddMyCharacter(characterData);
+            }
+        }
+
+        public void InjectGameSave(GameData gameSave)
+        {
+            foreach (var gameSaveCharacter in gameSave.Characters)
+            {
+                _charactersProvider.AddCharacter(gameSaveCharacter);
             }
         }
 

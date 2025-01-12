@@ -1,5 +1,5 @@
 using System;
-using Core.Mechanics.Shops.Provider;
+using Core.Mechanics.Shops;
 using Core.Scripts.Debugging;
 
 namespace Core.Storage.Bank.IntBank
@@ -30,6 +30,12 @@ namespace Core.Storage.Bank.IntBank
         }
 
         public bool CanSpend(int value) => Value >= value;
+        public void SetValue(int value)
+        {
+            Value = value;
+            OnChanged?.Invoke(this,StorageTool.CreateEventData(this));
+        }
+
         public int GetValue() 
             => Value;
     }

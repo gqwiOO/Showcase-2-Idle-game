@@ -10,6 +10,7 @@ namespace Mechanics.Product.Provider
     {
         IProductData GetProduct(string key);
         IEnumerable<IProductData> GetAllProductOfCharacter(string characterKey);
+        IEnumerable<IProductData> GetAllProduct();
         void AddProduct(IProductData key);
         void RemoveProduct(string key);
     }
@@ -47,6 +48,8 @@ namespace Mechanics.Product.Provider
 
             return result;
         }
+
+        public IEnumerable<IProductData> GetAllProduct() => _products.Values;
 
         public void AddProduct(IProductData product)
         {
