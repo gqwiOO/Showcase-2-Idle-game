@@ -6,7 +6,7 @@ namespace Mechanics.Developing.Data
 {
     public interface IDevelopingData
     {
-        List<ICharacterData> Developers { get; }
+        List<CharacterData> Developers { get; }
         
         event Action<float> OnProgressUpdated;
         float CurrentProgress { get; }

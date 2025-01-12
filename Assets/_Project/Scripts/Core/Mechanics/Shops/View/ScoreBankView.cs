@@ -1,5 +1,4 @@
-﻿using Core.Mechanics.Shops.Provider;
-using Core.Storage;
+﻿using Core.Storage;
 using Core.Storage.Bank;
 using TMPro;
 using UnityEngine;

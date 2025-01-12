@@ -3,7 +3,7 @@ using Mechanics.Companies;
 
 namespace Mechanics.Product
 {
-    public interface IProductService
+    public interface IProductService: IGameSaveDependent
     {
         event Action<IGameProductData> OnNewGameProductAdded;
         

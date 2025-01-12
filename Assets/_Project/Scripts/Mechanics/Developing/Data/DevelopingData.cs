@@ -4,16 +4,17 @@ using Mechanics.Characters;
 
 namespace Mechanics.Developing.Data
 {
+    [Serializable]
     public class DevelopingData : IDevelopingData
     {
-        public DevelopingData(List<ICharacterData> developers)
+        public DevelopingData(List<CharacterData> developers)
         {
             Developers = developers;
         }
 
-        public List<ICharacterData> Developers { get; set; }
+        public List<CharacterData> Developers { get; set; }
         public event Action<float> OnProgressUpdated;
-        public float CurrentProgress { get; private set; } = 0f;
+        public float CurrentProgress { get; set; } = 0f;
         public void AddProgress(float value)
         {
             CurrentProgress += value;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Mechanics.Characters
 {
@@ -9,6 +10,8 @@ namespace Mechanics.Characters
         void AddMyCharacter(ICharacterData characterData);
         ICharacterData GetMyCharacter();
         List<ICharacterData> GetAllCharacter();
-        
+
+        event Action<ICharacterData> OnMyCharacterInited;
+
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Core.Mechanics.Shops.Provider
+﻿namespace Core.Mechanics.Shops
 {
     public interface IBanksProvidersProvider
     {

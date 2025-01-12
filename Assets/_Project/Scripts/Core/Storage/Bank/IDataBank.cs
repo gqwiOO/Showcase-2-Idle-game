@@ -1,5 +1,5 @@
 using System;
-using Core.Mechanics.Shops.Provider;
+using Core.Mechanics.Shops;
 
 namespace Core.Storage.Bank
 {
@@ -18,6 +18,8 @@ namespace Core.Storage.Bank
         void Add(TData value);
         void Spend(TData value);
         bool CanSpend(TData value);
+
+        void SetValue(TData value);
         TData GetValue();
     }
     public interface IDataBank

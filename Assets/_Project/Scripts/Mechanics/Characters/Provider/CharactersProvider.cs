@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mechanics.Characters
@@ -9,6 +10,8 @@ namespace Mechanics.Characters
         
         private ICharacterData _myCharacter;
 
+        public event Action<ICharacterData> OnMyCharacterInited;
+
         public ICharacterData GetCharacterByKey(string key)
         {
             _characters.TryGetValue(key, out var result);
@@ -17,7 +20,7 @@ namespace Mechanics.Characters
 
         public List<ICharacterData> GetAllCharacter() 
             => _characters.Values.ToList();
-        
+
 
         public void AddCharacter(ICharacterData characterData) 
             => _characters.TryAdd(characterData.Key, characterData);
@@ -26,6 +29,7 @@ namespace Mechanics.Characters
         {
             _characters.TryAdd(characterData.Key, characterData);
             _myCharacter = characterData;
+            OnMyCharacterInited?.Invoke(_myCharacter);
         }
 
         public ICharacterData GetMyCharacter() 

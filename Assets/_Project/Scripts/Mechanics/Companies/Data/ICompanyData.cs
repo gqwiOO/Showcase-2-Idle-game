@@ -23,6 +23,7 @@ namespace Mechanics.Companies
     [Serializable]
     public class CompanyData : ICompanyData
     {
+        [JsonConstructor]
         public CompanyData(string key, string name, string owner)
         {
             Name = name;

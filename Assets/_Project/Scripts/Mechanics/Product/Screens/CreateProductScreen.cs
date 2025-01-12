@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
@@ -41,7 +42,7 @@ namespace Mechanics.Product
         private ICharacterData _myCharacter;
         
         private GameGenre _currentGenre;
-        private List<ICharacterData> _currentSelectedEmployees = new ();
+        private readonly List<ICharacterData> _currentSelectedEmployees = new ();
         
 
         private IProductService _productService;
@@ -135,8 +136,9 @@ namespace Mechanics.Product
             CreateGameProductData createGameProductData = 
                 new CreateGameProductData(_nameText.text,
                     _currentGenre,
-                    new DevelopingData(_currentSelectedEmployees) ,
-                    "TestProductKey_2");
+                    new DevelopingData(_currentSelectedEmployees.Select(item => (CharacterData)item).ToList()) ,
+                    Guid.NewGuid().ToString());
+
             _productService.CreateGameProduct(createGameProductData,_myCharacter.Key);
 
             ResetView();

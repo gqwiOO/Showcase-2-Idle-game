@@ -1,5 +1,5 @@
 ﻿using System;
-using Core.Mechanics.Shops.Provider;
+using Core.Mechanics.Shops;
 
 namespace Core.Storage.Bank.FloatBank
 {
@@ -28,6 +28,11 @@ namespace Core.Storage.Bank.FloatBank
         }
 
         public bool CanSpend(float value) => Value >= value;
+        public void SetValue(float value)
+        {
+            Value = value;
+            OnChanged?.Invoke(this,StorageTool.CreateEventData(this));
+        }
 
         public float GetValue() => Value;
     }

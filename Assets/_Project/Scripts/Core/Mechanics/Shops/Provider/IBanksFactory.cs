@@ -1,7 +1,7 @@
 ﻿using Core.Storage.Bank.FloatBank;
 using Core.Storage.Bank.IntBank;
 
-namespace Core.Mechanics.Shops.Provider
+namespace Core.Mechanics.Shops
 {
     public interface IBanksFactory
     {

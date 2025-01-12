@@ -1,5 +1,4 @@
-﻿using Core.Mechanics.Shops.Model;
-using Core.Scripts.Pools;
+﻿using Core.Scripts.Pools;
 using Core.Storage;
 using Core.Storage.Bank;
 using TMPro;

@@ -1,7 +1,6 @@
-﻿using Core.Mechanics.Shops.Model;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Core.Mechanics.Shops.Asset
+namespace Core.Mechanics.Shops
 {
     [CreateAssetMenu(fileName = "ShopItemAsset")]
     public class ShopItemDataAsset : GuidAsset,IShopItemData

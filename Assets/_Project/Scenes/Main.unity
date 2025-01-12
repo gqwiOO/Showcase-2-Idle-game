@@ -22378,7 +22378,7 @@ MonoBehaviour:
     - {fileID: 1209296497}
     - {fileID: 102620740}
     - {fileID: 944934400}
-    - {fileID: 1693729579}
+    - {fileID: 3309092023463253678}
     - {fileID: 1327113677}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -22387,7 +22387,7 @@ MonoBehaviour:
     SerializationNodes:
     - Name: _screens
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[_Project.Scripts.Services.Screen.BaseScreen,
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[Services.Screen.BaseScreen,
         Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
@@ -22407,7 +22407,7 @@ MonoBehaviour:
       Data: 2|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: _Project.Scripts.Mechanics.Upgrades.Screen.CharacterUpgradesScreen, Assembly-CSharp
+      Data: Mechanics.Upgrades.Screen.CharacterUpgradesScreen, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -22425,7 +22425,7 @@ MonoBehaviour:
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: _Project.Scripts.Mechanics.Companies.CompanyScreen, Assembly-CSharp
+      Data: Mechanics.Companies.CompanyScreen, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -22443,7 +22443,7 @@ MonoBehaviour:
       Data: 4|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: _Project.Scripts.Mechanics.Product.CharacterProductsScreen, Assembly-CSharp
+      Data: Mechanics.Product.CharacterProductsScreen, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -22461,7 +22461,7 @@ MonoBehaviour:
       Data: 5|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: _Project.Scripts.Mechanics.Product.CreateProductScreen, Assembly-CSharp
+      Data: Mechanics.Product.CreateProductScreen, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -22479,7 +22479,7 @@ MonoBehaviour:
       Data: 6|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: _Project.Scripts.Mechanics.Product.SelectDevelopersScreen, Assembly-CSharp
+      Data: Mechanics.Product.SelectDevelopersScreen, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -22497,7 +22497,7 @@ MonoBehaviour:
       Data: 7|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: HiringScreen, Assembly-CSharp
+      Data: Mechanics.Hiring.Screens.HiringScreen, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -22515,7 +22515,7 @@ MonoBehaviour:
       Data: 8|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: _Project.Scripts.Mechanics.Hiring.Screens.HiringConfirmationScreen, Assembly-CSharp
+      Data: Mechanics.Hiring.Screens.HiringConfirmationScreen, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -22533,8 +22533,7 @@ MonoBehaviour:
       Data: 9|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: _Project.Scripts.Mechanics.CompaniesRating.Screen.CompaniesRatingScreen,
-        Assembly-CSharp
+      Data: Mechanics.CompaniesRating.Screen.CompaniesRatingScreen, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -22552,7 +22551,7 @@ MonoBehaviour:
       Data: 10|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: _Project.Scripts.Mechanics.MainMenu.Screens.MainMenuScreen, Assembly-CSharp
+      Data: Mechanics.MainMenu.Screens.MainMenuScreen, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -26983,7 +26982,7 @@ MonoBehaviour:
     SerializationNodes:
     - Name: _statesList
       Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[_Project.Scripts.Core.Scripts.StateMachine.IExitableState,
+      Data: 0|System.Collections.Generic.List`1[[Core.Scripts.StateMachine.States.IExitableState,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
@@ -27902,31 +27901,11 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
---- !u!1 &1693729577 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8115506470792667684, guid: 479623b24182fee4c9911105896fc10c, type: 3}
-  m_PrefabInstance: {fileID: 3309092023463253677}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1693729578 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7229913453875991458, guid: 479623b24182fee4c9911105896fc10c, type: 3}
   m_PrefabInstance: {fileID: 3309092023463253677}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1693729579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1693729577}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b566c61268b84b19b3e0fa291144d571, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _views: []
-  _pool: {fileID: 1533767669}
-  _container: {fileID: 1972800836}
 --- !u!1 &1697641103
 GameObject:
   m_ObjectHideFlags: 0
@@ -32508,11 +32487,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7474808078513925502, guid: 945d4f9099e1e9044897b000007b6a91, type: 3}
   m_PrefabInstance: {fileID: 1064125676}
   m_PrefabAsset: {fileID: 0}
---- !u!224 &1972800836 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1018602963002028477, guid: 479623b24182fee4c9911105896fc10c, type: 3}
-  m_PrefabInstance: {fileID: 3309092023463253677}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1977082190 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2752056562683284680, guid: e6ea076e450a9ba42b7a1385a2146635, type: 3}
@@ -34821,11 +34795,19 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3871844363883784664, guid: 479623b24182fee4c9911105896fc10c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1533767668}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8115506470792667684, guid: 479623b24182fee4c9911105896fc10c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1693729579}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 479623b24182fee4c9911105896fc10c, type: 3}
+--- !u!114 &3309092023463253678 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5680174747841467106, guid: 479623b24182fee4c9911105896fc10c, type: 3}
+  m_PrefabInstance: {fileID: 3309092023463253677}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b566c61268b84b19b3e0fa291144d571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3738811861554459341 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1027585946578575029, guid: e6ea076e450a9ba42b7a1385a2146635, type: 3}

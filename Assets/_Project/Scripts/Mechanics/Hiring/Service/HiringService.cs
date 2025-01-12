@@ -66,7 +66,7 @@ namespace Mechanics.Hiring.Service
             List<ICharacterData> result = new();
             var generateAmount = MAX_FREE_EMPLOYEES;
 
-            System.Random random = new System.Random();
+            Random random = new System.Random();
             for (int i = 0; i < generateAmount; i++)
             {
                 CharacterSkill skill = (CharacterSkill)(random.Next(1, Enum.GetValues(typeof(CharacterSkill)).Length));
@@ -79,6 +79,8 @@ namespace Mechanics.Hiring.Service
                     skill);
                 
                 result.Add(characterData);
+                
+                _charactersProvider.AddCharacter(characterData);
             }
 
             return result;

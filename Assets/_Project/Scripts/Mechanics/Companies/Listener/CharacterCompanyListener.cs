@@ -22,8 +22,8 @@ namespace Mechanics.Companies
 
         public void Initialize()
         {
-            _myCharacter = _charactersProvider.GetMyCharacter();
             _companiesService.OnAnyCompanyUpdated += CompaniesService_OnAnyCompanyUpdated;
+            _charactersProvider.OnMyCharacterInited += characterData => _myCharacter = characterData;
         }
 
         public void Dispose() 

@@ -1,8 +1,11 @@
 ﻿using System;
 using Mechanics.Developing.Data;
+using Newtonsoft.Json;
 
 namespace Mechanics.Product
 {
+    
+    [Serializable]
     public class GameProductData : IGameProductData
     {
         public event Action OnIncomeChanged;
@@ -16,10 +19,14 @@ namespace Mechanics.Product
 
         public ProductState ProductState { get; set; }
 
-        public IDevelopingData DevelopingData { get; set; }
+        [JsonIgnore]
+        IDevelopingData IProductData.DevelopingData => _developingData;
+        
+        public DevelopingData _developingData { get; set; }
 
         public GameGenre Genre { get; set; }
 
+        [JsonConstructor]
         public GameProductData(string key, string name, float income, GameGenre genre, ProductState productState = ProductState.Developing)
         {
             Key = key;
@@ -31,7 +38,7 @@ namespace Mechanics.Product
 
         public GameProductData(CreateGameProductData createGameProductData, bool isReleased = false)
         {
-            Key = createGameProductData.key;
+            Key = createGameProductData.Key;
             Name = createGameProductData.Name;
             IncomePerMonth = 5;
             Genre = createGameProductData.Genre;
@@ -41,7 +48,7 @@ namespace Mechanics.Product
             else
             {
                 ProductState = ProductState.Developing;
-                DevelopingData = createGameProductData.DevelopingData;
+                _developingData = createGameProductData.DevelopingData;
             }
         }
 

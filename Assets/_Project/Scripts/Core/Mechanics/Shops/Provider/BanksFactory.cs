@@ -2,7 +2,7 @@
 using Core.Storage.Bank.IntBank;
 using Zenject;
 
-namespace Core.Mechanics.Shops.Provider
+namespace Core.Mechanics.Shops
 {
     public class BanksFactory: IBanksFactory, IInitializable
     {
@@ -15,9 +15,6 @@ namespace Core.Mechanics.Shops.Provider
         {
             _banksIntProvider = scoreBanksProvider.GetIntBankProvider();
             _banksFloatProvider = scoreBanksProvider.GetFloatBankProvider();
-            CreateFloatBankWithId(BankId.FruitsBank,500);
-
-
         }
         public void Initialize()
         {       
