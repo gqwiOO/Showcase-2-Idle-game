@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.Scripts.Services.Tutorial;
 using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
@@ -89,6 +90,14 @@ namespace Services.Screen
             var screen = GetScreen<CompanyEventScreen>();
             screen.Init(companyEventData);
             await screen.Open();
+        }
+
+        public IEnumerable<BaseTutorialScreen> GetAllTutorialScreen()
+        {
+            foreach (var baseTutorialScreen in GetAllScreensOfType<BaseTutorialScreen>())
+            {
+                yield return baseTutorialScreen;
+            }
         }
     }
 }

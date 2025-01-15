@@ -1,4 +1,6 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Core.Scripts.Services.Tutorial;
+using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.Events;
@@ -19,5 +21,7 @@ namespace Services.Screen.Interfaces
         UniTask ShowCompanyScreen(ICompanyData companyData);
         UniTask ShowCompaniesRatingScreen();
         UniTask ShowCompanyEventScreen(CompanyEventData companyEventData);
+
+        IEnumerable<BaseTutorialScreen> GetAllTutorialScreen();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Scripts.Services.Tutorial;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -21,6 +22,17 @@ namespace Services.Screen
         protected List<BaseScreen> GetAllScreensExceptOf(BaseScreen screen)
         {
             return _screens.Values.Where(item => item != screen).ToList();
+        }
+        
+        protected IEnumerable<T> GetAllScreensOfType<T>() where T : BaseScreen
+        {
+            foreach (var screen in _screens.Values)
+            {
+                if (screen is T castedScreen)
+                {
+                    yield return castedScreen;
+                }
+            }
         }
 
         protected T GetScreen<T>() where T : BaseScreen

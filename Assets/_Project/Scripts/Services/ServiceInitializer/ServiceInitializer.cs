@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Core.Mechanics.Shops;
+using Core.Scripts.Services.Tutorial;
 using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.CompaniesRating.Service;
@@ -28,14 +29,16 @@ namespace Services.ServiceInitializer
         private IBanksProvidersProvider _banksProvidersProvider;
         private IBanksFactory _banksFactory;
         private IEventsService _eventsService;
+        private ITutorialService _tutorialService;
 
         [Inject]
         private void Construct(IGameEconomyService gameEconomyService, ICharactersService charactersService, IHiringService hiringService,
             ISettingsInitializer settingsInitializer, ICompaniesRatingService companiesRatingService, IAutoSaveService autoSaveService,
             IGameSaveService gameSaveService, ICompaniesService companiesService, IProductService productService,
-            IBanksProvidersProvider banksProvidersProvider, IBanksFactory banksFactory, IEventsService eventsService
+            IBanksProvidersProvider banksProvidersProvider, IBanksFactory banksFactory, IEventsService eventsService, ITutorialService tutorialService
             )
         {
+            _tutorialService = tutorialService;
             _eventsService = eventsService;
             _banksFactory = banksFactory;
             _banksProvidersProvider = banksProvidersProvider;
