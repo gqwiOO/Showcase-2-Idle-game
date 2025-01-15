@@ -1,0 +1,16 @@
+{
+  "EventSettings": [
+    {
+      "EventName": "Event1",
+      "EventType": 1
+    },
+    {
+      "EventName": "Event2",
+      "EventType": 2
+    }
+  ],
+  "EventSettingsValues": {
+    "1": 0.3,
+    "2": -0.2
+  }
+}

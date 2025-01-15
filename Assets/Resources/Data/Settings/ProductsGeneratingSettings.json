@@ -1,4 +1,17 @@
 ﻿{
+  "WeakProductIncomeRange":{
+    "x": 5,
+    "y": 10
+  },
+  "MidProductIncomeRange":{
+    "x": 5,
+    "y": 10
+  },
+  "SuccessfulProductIncomeRange":{
+    "x": 5,
+    "y": 10
+  },
+  
   "ProductsSettingsByGenres": [
     {
       "Genre": 1,

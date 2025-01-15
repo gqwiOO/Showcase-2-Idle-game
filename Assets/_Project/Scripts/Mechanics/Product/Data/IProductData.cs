@@ -11,6 +11,8 @@ namespace Mechanics.Product
         ProductState ProductState { get; }
         IDevelopingData DevelopingData { get; }
 
+        void SetNewIncome(float newIncome);
+
         event Action<IProductData> OnReleased;
 
         void ReleaseProduct();

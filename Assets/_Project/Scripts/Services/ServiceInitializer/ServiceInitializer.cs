@@ -4,6 +4,7 @@ using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.CompaniesRating.Service;
 using Mechanics.DataSettings.Provider;
+using Mechanics.Events;
 using Mechanics.GameSave;
 using Mechanics.Hiring.Service;
 using Mechanics.Income;
@@ -26,14 +27,16 @@ namespace Services.ServiceInitializer
         private IProductService _productService;
         private IBanksProvidersProvider _banksProvidersProvider;
         private IBanksFactory _banksFactory;
+        private IEventsService _eventsService;
 
         [Inject]
         private void Construct(IGameEconomyService gameEconomyService, ICharactersService charactersService, IHiringService hiringService,
             ISettingsInitializer settingsInitializer, ICompaniesRatingService companiesRatingService, IAutoSaveService autoSaveService,
             IGameSaveService gameSaveService, ICompaniesService companiesService, IProductService productService,
-            IBanksProvidersProvider banksProvidersProvider, IBanksFactory banksFactory
+            IBanksProvidersProvider banksProvidersProvider, IBanksFactory banksFactory, IEventsService eventsService
             )
         {
+            _eventsService = eventsService;
             _banksFactory = banksFactory;
             _banksProvidersProvider = banksProvidersProvider;
             _productService = productService;
@@ -59,11 +62,15 @@ namespace Services.ServiceInitializer
             await InitProducts();
             await _companiesRatingService.Init();
             await _gameEconomyService.Init();
+            await _eventsService.Init();
         }
 
         private void InitBanks()
         {
             _banksFactory.CreateFloatBankWithId(BankId.FruitsBank,0);
+            
+            if(!_gameSaveService.IsGameLoaded())
+                _banksProvidersProvider.GetFloatBankProvider().Get(BankId.FruitsBank).SetValue(1000);
         }
 
         private async Task InitCompanies()

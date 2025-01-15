@@ -3,6 +3,8 @@ using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.CompaniesRating.Screen;
+using Mechanics.Events;
+using Mechanics.Events.Screens;
 using Mechanics.Hiring.Screens;
 using Mechanics.MainMenu.Screens;
 using Mechanics.Product;
@@ -79,6 +81,13 @@ namespace Services.Screen
         {
             var screen = GetScreen<CompaniesRatingScreen>();
             screen.Init();
+            await screen.Open();
+        }
+
+        public async UniTask ShowCompanyEventScreen(CompanyEventData companyEventData)
+        {
+            var screen = GetScreen<CompanyEventScreen>();
+            screen.Init(companyEventData);
             await screen.Open();
         }
     }

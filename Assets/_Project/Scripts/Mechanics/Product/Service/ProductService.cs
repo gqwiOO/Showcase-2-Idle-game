@@ -130,6 +130,12 @@ namespace Mechanics.Product
                 .Name;
         }
 
+        public void ChangeProductIncome(string productKey, float percent)
+        {
+            var product = _productsProvider.GetProduct(productKey);
+            product.SetNewIncome(product.IncomePerMonth +product.IncomePerMonth * percent);
+        }
+
         private float GetDeveloperTimeBoost(ICharacterData characterData)
         {
             // TODO: Remote
@@ -148,5 +154,6 @@ namespace Mechanics.Product
             }
             
         }
+        
     }
 }

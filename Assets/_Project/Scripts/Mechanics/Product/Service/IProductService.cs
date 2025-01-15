@@ -10,5 +10,7 @@ namespace Mechanics.Product
         void CreateGameProduct(CreateGameProductData createGameProductData, string Owner);
         void CreateGameProduct(CreateGameProductData createGameProductData, ICompanyData Owner);
         string GetRandomGameNameWithGenre(GameGenre gameGenre, string currentName = "");
+        
+        void ChangeProductIncome(string productKey, float percent);
     }
 }

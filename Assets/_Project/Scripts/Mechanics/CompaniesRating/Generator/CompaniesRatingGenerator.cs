@@ -8,9 +8,9 @@ using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.CompaniesRating.Data;
 using Mechanics.CompaniesRating.Json;
-using Mechanics.DataSettings;
 using Mechanics.Hiring.Data;
 using Mechanics.Product;
+using Random = System.Random;
 
 namespace Mechanics.CompaniesRating.Generator
 {
@@ -152,18 +152,5 @@ namespace Mechanics.CompaniesRating.Generator
 
             return Task.CompletedTask;
         }
-    }
-
-    [Serializable]
-    public class ProductsGeneratingSettings: ISettingsData
-    {
-        public List<ProductsSettingsByGenre> ProductsSettingsByGenres;
-    }
-
-    [Serializable]
-    public class ProductsSettingsByGenre
-    {
-        public GameGenre Genre;
-        public List<string> Names;
     }
 }

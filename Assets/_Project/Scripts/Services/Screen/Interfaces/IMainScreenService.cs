@@ -1,6 +1,7 @@
 ﻿using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.Events;
 using Mechanics.Product;
 
 namespace Services.Screen.Interfaces
@@ -17,5 +18,6 @@ namespace Services.Screen.Interfaces
         UniTask HideAllScreensExceptOf<T>() where T : BaseScreen;
         UniTask ShowCompanyScreen(ICompanyData companyData);
         UniTask ShowCompaniesRatingScreen();
+        UniTask ShowCompanyEventScreen(CompanyEventData companyEventData);
     }
 }

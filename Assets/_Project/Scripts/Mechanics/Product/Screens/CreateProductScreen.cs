@@ -98,7 +98,8 @@ namespace Mechanics.Product
         private List<ICharacterData> GetNotSelectedEmployeesOnProduct()
         {
             HashSet<ICharacterData> companyEmployees = new HashSet<ICharacterData>(_companiesService.GetCompanyEmployees(_myCharacter.CompanyKey));
-            companyEmployees.Add(_myCharacter);
+            if(!companyEmployees.Any(employee => employee.Key == _myCharacter.Key))
+                companyEmployees.Add(_myCharacter);
             var result = companyEmployees
                 .Where(item => !_currentSelectedEmployees.Contains(item)).ToList();
             return result;

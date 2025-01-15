@@ -9,6 +9,7 @@ namespace Mechanics.Product
     public class GameProductData : IGameProductData
     {
         public event Action OnIncomeChanged;
+        
         public event Action<IProductData> OnReleased;
 
         public string Key { get; set; }
@@ -56,6 +57,12 @@ namespace Mechanics.Product
         {
             ProductState = ProductState.Released;
             OnReleased?.Invoke(this);
+        }
+        
+        public void SetNewIncome(float newIncome)
+        {
+            IncomePerMonth = newIncome;
+            OnIncomeChanged?.Invoke();
         }
     }
 }
