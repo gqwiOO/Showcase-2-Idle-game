@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +8,7 @@ using Core.Scripts.Services.UpdateService;
 using Core.Storage.Bank;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.DayNight;
 using Mechanics.Product;
 using Mechanics.Product.Provider;
 using Zenject;
@@ -31,6 +32,7 @@ namespace Mechanics.Income
         private ICompaniesService _companiesService;
         private ICharacterCompanyListener _characterCompanyListener;
         private IProductsProvider _productsProvider;
+        private IGameTimeService _gameTimeService;
 
         public event Action OnMyPlayerIncomeChanged;
 
@@ -42,8 +44,10 @@ namespace Mechanics.Income
         [Inject]
         private void Construct(ICompaniesProvider companiesProvider, ICharactersProvider charactersProvider,
             IBanksProvidersProvider banksProvidersProvider, IUpdateService updateService, ICompaniesService companiesService,
-            ICharacterCompanyListener characterCompanyListener, IProductsProvider productsProvider)
+            ICharacterCompanyListener characterCompanyListener, IProductsProvider productsProvider,
+            IGameTimeService gameTimeService)
         {
+            _gameTimeService = gameTimeService;
             _productsProvider = productsProvider;
             _characterCompanyListener = characterCompanyListener;
             _companiesService = companiesService;
@@ -158,6 +162,9 @@ namespace Mechanics.Income
 
         public void Tick(float tickTime)
         {
+            if (_gameTimeService.CurrentPhase != DayNightPhase.Day)
+                return;
+
             var addValue = GetIncomePerTick(tickTime, _myCharacter);
             _bank.Add(addValue);
             OnPlayerBalanceChanged?.Invoke(_bank.GetValue());

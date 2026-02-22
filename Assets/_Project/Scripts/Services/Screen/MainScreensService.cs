@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.CompaniesRating.Screen;
+using Mechanics.DayNight;
 using Mechanics.Hiring.Screens;
 using Mechanics.MainMenu.Screens;
 using Mechanics.Product;
@@ -79,6 +80,13 @@ namespace Services.Screen
         {
             var screen = GetScreen<CompaniesRatingScreen>();
             screen.Init();
+            await screen.Open();
+        }
+
+        public async UniTask ShowDayResultScreen(DaySummaryData data)
+        {
+            var screen = GetScreen<DayResultScreen>();
+            screen.Init(data);
             await screen.Open();
         }
     }
