@@ -1,7 +1,5 @@
 using System;
-using Core.Mechanics.Shops;
 using Core.Scripts.Services.UpdateService;
-using Core.Storage.Bank;
 using Mechanics.Income;
 using UnityEngine;
 using Zenject;
@@ -13,7 +11,6 @@ namespace Mechanics.DayNight
     {
         private readonly DayNightConfig _config;
         private readonly IUpdateService _updateService;
-        private readonly IBanksProvidersProvider _banksProvidersProvider;
 
         private float _accumulatedRealSeconds;
         private int _currentGameHour = 7;
@@ -73,12 +70,11 @@ namespace Mechanics.DayNight
 
         [Inject]
         public GameTimeService(DayNightConfig config, IUpdateService updateService,
-            IBanksProvidersProvider banksProvidersProvider, IGameEconomyService gameEconomyService)
+            IGameEconomyService gameEconomyService)
         {
             _gameEconomyService = gameEconomyService;
             _config = config;
             _updateService = updateService;
-            _banksProvidersProvider = banksProvidersProvider;
         }
 
         public void Init()
@@ -89,18 +85,7 @@ namespace Mechanics.DayNight
             _updateService.Add(this);
         }
 
-        private float GetPlayerBalance()
-        {
-            try
-            {
-                var bank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.FruitsBank);
-                return bank.GetValue();
-            }
-            catch
-            {
-                return 0f;
-            }
-        }
+        private float GetPlayerBalance() => _gameEconomyService.GetCleanBalance();
 
         private void OnBalanceChanged(float newBalance)
         {

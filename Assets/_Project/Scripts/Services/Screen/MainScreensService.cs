@@ -5,6 +5,7 @@ using Mechanics.Companies;
 using Mechanics.CompaniesRating.Screen;
 using Mechanics.DayNight;
 using Mechanics.Hiring.Screens;
+using Mechanics.Income.Screens;
 using Mechanics.MainMenu.Screens;
 using Mechanics.Product;
 using Services.Screen.Interfaces;
@@ -87,6 +88,12 @@ namespace Services.Screen
         {
             var screen = GetScreen<DayResultScreen>();
             screen.Init(data);
+            await screen.Open();
+        }
+
+        public async UniTask ShowLaunderMoneyScreen()
+        {
+            var screen = GetScreen<LaunderMoneyScreen>();
             await screen.Open();
         }
     }

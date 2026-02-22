@@ -67,7 +67,9 @@ namespace Services.ServiceInitializer
 
         private void InitBanks()
         {
-            _banksFactory.CreateFloatBankWithId(BankId.FruitsBank,0);
+            _banksFactory.CreateFloatBankWithId(BankId.CleanMoney, 0);
+            _banksFactory.CreateFloatBankWithId(BankId.DirtyMoney, 0);
+            _banksFactory.CreateIntBankWithId(BankId.FruitsBank, 0);
         }
 
         private async Task InitCompanies()

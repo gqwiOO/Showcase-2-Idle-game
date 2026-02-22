@@ -21,7 +21,8 @@ namespace Mechanics.Income
         private readonly Dictionary<string, float> _productsIncomes = new();
         private readonly Dictionary<string, float> _charactersIncomes = new();
 
-        private IDataBank<float> _bank;
+        private IDataBank<float> _cleanBank;
+        private IDataBank<float> _dirtyBank;
         private ICharacterData _myCharacter;
 
         private ICompaniesProvider _companiesProvider;
@@ -37,6 +38,10 @@ namespace Mechanics.Income
         public event Action OnMyPlayerIncomeChanged;
 
         public event Action<float> OnPlayerBalanceChanged;
+
+        public event Action<float> OnCleanBalanceChanged;
+
+        public event Action<float> OnDirtyBalanceChanged;
 
         public UpdateType UpdateType => UpdateType.Update;
 
@@ -64,7 +69,8 @@ namespace Mechanics.Income
                 _charactersIncomes.TryAdd(characterData.Key,CalculateCharacterIncomePerMonth(characterData));
             }
 
-            _bank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.FruitsBank);
+            _cleanBank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.CleanMoney);
+            _dirtyBank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.DirtyMoney);
             _myCharacter = _charactersProvider.GetMyCharacter();
             
             _characterCompanyListener.OnMyCharacterCompanyDataChanged += CharacterCompanyListenerOnOnMyCharacterCompanyDataChanged;
@@ -79,11 +85,57 @@ namespace Mechanics.Income
         public float GetCharacterIncomePerMonth(ICharacterData characterData) 
             => _charactersIncomes[characterData.Key];
 
-        public void Spend(float value) 
-            => _bank.Spend(value);
+        public void Spend(float value) => SpendClean(value);
 
-        public bool CanSpend(float value) 
-            => _bank.CanSpend(value);
+        public bool CanSpend(float value) => CanSpendClean(value);
+
+        public void SpendClean(float value)
+        {
+            _cleanBank.Spend(value);
+            OnPlayerBalanceChanged?.Invoke(_cleanBank.GetValue());
+            OnCleanBalanceChanged?.Invoke(_cleanBank.GetValue());
+        }
+
+        public bool CanSpendClean(float value) => _cleanBank.CanSpend(value);
+
+        public void SpendDirty(float value)
+        {
+            _dirtyBank.Spend(value);
+            OnDirtyBalanceChanged?.Invoke(_dirtyBank.GetValue());
+        }
+
+        public bool CanSpendDirty(float value) => _dirtyBank.CanSpend(value);
+
+        public void LaunderDirtyToClean(float amount)
+        {
+            if (!_dirtyBank.CanSpend(amount)) return;
+            _dirtyBank.Spend(amount);
+            _cleanBank.Add(amount);
+            OnPlayerBalanceChanged?.Invoke(_cleanBank.GetValue());
+            OnCleanBalanceChanged?.Invoke(_cleanBank.GetValue());
+            OnDirtyBalanceChanged?.Invoke(_dirtyBank.GetValue());
+        }
+
+        public bool CanLaunder(float amount) => _dirtyBank.CanSpend(amount);
+
+        public float GetCleanBalance() => _cleanBank.GetValue();
+
+        public float GetDirtyBalance() => _dirtyBank.GetValue();
+
+        public void AddCleanMoney(float amount)
+        {
+            if (amount <= 0) return;
+            _cleanBank.Add(amount);
+            OnPlayerBalanceChanged?.Invoke(_cleanBank.GetValue());
+            OnCleanBalanceChanged?.Invoke(_cleanBank.GetValue());
+        }
+
+        public void AddDirtyMoney(float amount)
+        {
+            if (amount <= 0) return;
+            _dirtyBank.Add(amount);
+            OnDirtyBalanceChanged?.Invoke(_dirtyBank.GetValue());
+        }
 
         public float GetCompanyIncomePerMonth(string companyKey)
         {
@@ -162,13 +214,20 @@ namespace Mechanics.Income
 
         public void Tick(float tickTime)
         {
-            if (_gameTimeService.CurrentPhase != DayNightPhase.Day)
-                return;
-
             var addValue = GetIncomePerTick(tickTime, _myCharacter);
-            _bank.Add(addValue);
-            OnPlayerBalanceChanged?.Invoke(_bank.GetValue());
-            Debugging.Log(this,$"Added income value to player {addValue} ");
+            if (_gameTimeService.CurrentPhase == DayNightPhase.Day)
+            {
+                _cleanBank.Add(addValue);
+                OnPlayerBalanceChanged?.Invoke(_cleanBank.GetValue());
+                OnCleanBalanceChanged?.Invoke(_cleanBank.GetValue());
+                Debugging.Log(this, $"Added clean income to player {addValue}");
+            }
+            else
+            {
+                _dirtyBank.Add(addValue);
+                OnDirtyBalanceChanged?.Invoke(_dirtyBank.GetValue());
+                Debugging.Log(this, $"Added dirty income to player {addValue}");
+            }
         }
     }
 }

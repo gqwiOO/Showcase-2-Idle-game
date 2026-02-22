@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Mechanics.Characters;
 using Mechanics.Companies;
@@ -16,6 +16,8 @@ namespace Mechanics.GameSave
 
         public CharacterData MyCharacter;
 
-        public float MoneyAmount;
+        public float MoneyAmount; // Legacy, maps to CleanMoneyAmount when loading
+        public float CleanMoneyAmount;
+        public float DirtyMoneyAmount;
     }
 }

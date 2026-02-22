@@ -1,4 +1,5 @@
-﻿using Zenject;
+using Mechanics.Income.Service;
+using Zenject;
 
 namespace Mechanics.Income.Installer
 {
@@ -7,6 +8,7 @@ namespace Mechanics.Income.Installer
         public override void InstallBindings()
         {
             Container.BindInterfacesTo<GameEconomyService>().AsSingle();
+            Container.BindInterfacesTo<LaunderService>().AsSingle();
         }
     }
 }

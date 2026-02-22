@@ -19,5 +19,6 @@ namespace Services.Screen.Interfaces
         UniTask ShowCompanyScreen(ICompanyData companyData);
         UniTask ShowCompaniesRatingScreen();
         UniTask ShowDayResultScreen(DaySummaryData data);
+        UniTask ShowLaunderMoneyScreen();
     }
 }

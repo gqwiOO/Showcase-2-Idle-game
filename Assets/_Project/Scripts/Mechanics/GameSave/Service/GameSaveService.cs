@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,12 +24,13 @@ namespace Mechanics.GameSave
         private IProductsProvider _productsProvider;
         private IBanksProvidersProvider _banksProvidersProvider;
         
-        private IDataBank<float> _wallet;
+        private IDataBank<float> _cleanWallet;
+        private IDataBank<float> _dirtyWallet;
 
         public IEnumerable<ICompanyData> Companies => _gameData.Companies;
         public IEnumerable<ICharacterData> Characters  => _gameData.Characters;
         public ICharacterData MyCharacter  => _gameData.MyCharacter;
-        public float MoneyAmount  => _gameData.MoneyAmount;
+        public float MoneyAmount  => _gameData.CleanMoneyAmount;
 
         public GameSaveService(ICompaniesProvider companiesProvider, ICharactersProvider charactersProvider,
             IProductsProvider productsProvider, IBanksProvidersProvider banksProvidersProvider)
@@ -42,9 +43,9 @@ namespace Mechanics.GameSave
 
         public async Task Init()
         {
-            _wallet = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.FruitsBank);
+            _cleanWallet = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.CleanMoney);
+            _dirtyWallet = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.DirtyMoney);
             await LoadLastGame();
-
         }
 
         private string ConvertGameToJson()
@@ -60,7 +61,9 @@ namespace Mechanics.GameSave
                 Characters = new List<CharacterData>(characters.Select(item => (CharacterData)item)),
                 Products = new List<GameProductData>(products.Select(item => (GameProductData)item)),
                 MyCharacter = myCharacter,
-                MoneyAmount = _wallet.GetValue()
+                MoneyAmount = _cleanWallet.GetValue(),
+                CleanMoneyAmount = _cleanWallet.GetValue(),
+                DirtyMoneyAmount = _dirtyWallet.GetValue()
             };
 
             return  Newtonsoft.Json.JsonConvert.SerializeObject(gameData);
@@ -76,7 +79,10 @@ namespace Mechanics.GameSave
                 _gameData = data;
             });
             
-            _wallet.SetValue(_gameData.MoneyAmount);
+            var cleanAmount = _gameData.CleanMoneyAmount > 0 ? _gameData.CleanMoneyAmount : _gameData.MoneyAmount;
+            var dirtyAmount = _gameData.DirtyMoneyAmount;
+            _cleanWallet.SetValue(cleanAmount);
+            _dirtyWallet.SetValue(dirtyAmount);
             return _gameData;
         }
 
