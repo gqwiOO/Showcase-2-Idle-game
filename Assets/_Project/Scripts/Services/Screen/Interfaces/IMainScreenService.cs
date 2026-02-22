@@ -1,6 +1,7 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.DayNight;
 using Mechanics.Product;
 
 namespace Services.Screen.Interfaces
@@ -17,5 +18,6 @@ namespace Services.Screen.Interfaces
         UniTask HideAllScreensExceptOf<T>() where T : BaseScreen;
         UniTask ShowCompanyScreen(ICompanyData companyData);
         UniTask ShowCompaniesRatingScreen();
+        UniTask ShowDayResultScreen(DaySummaryData data);
     }
 }

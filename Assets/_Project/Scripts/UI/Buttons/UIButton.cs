@@ -12,7 +12,7 @@ namespace UI.Buttons
         [Header("Properties")]
         
         [SerializeField] 
-        private bool playSound;
+        private bool playSound = true;
          
         public event Action OnClicked; 
 

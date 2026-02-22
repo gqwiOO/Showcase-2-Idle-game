@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Core.Mechanics.Shops;
 using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.CompaniesRating.Service;
 using Mechanics.DataSettings.Provider;
+using Mechanics.DayNight;
 using Mechanics.GameSave;
 using Mechanics.Hiring.Service;
 using Mechanics.Income;
@@ -16,6 +17,7 @@ namespace Services.ServiceInitializer
     public class ServiceInitializer : IServiceInitializer
     {
         private IGameEconomyService _gameEconomyService;
+        private IGameTimeService _gameTimeService;
         private ICharactersService _charactersService;
         private IHiringService _hiringService;
         private ISettingsInitializer _settingsInitializer;
@@ -28,7 +30,7 @@ namespace Services.ServiceInitializer
         private IBanksFactory _banksFactory;
 
         [Inject]
-        private void Construct(IGameEconomyService gameEconomyService, ICharactersService charactersService, IHiringService hiringService,
+        private void Construct(IGameEconomyService gameEconomyService, IGameTimeService gameTimeService, ICharactersService charactersService, IHiringService hiringService,
             ISettingsInitializer settingsInitializer, ICompaniesRatingService companiesRatingService, IAutoSaveService autoSaveService,
             IGameSaveService gameSaveService, ICompaniesService companiesService, IProductService productService,
             IBanksProvidersProvider banksProvidersProvider, IBanksFactory banksFactory
@@ -44,6 +46,7 @@ namespace Services.ServiceInitializer
             _settingsInitializer = settingsInitializer;
             _hiringService = hiringService;
             _charactersService = charactersService;
+            _gameTimeService = gameTimeService;
             _gameEconomyService = gameEconomyService;
         }
         public async Task Init()
@@ -59,6 +62,7 @@ namespace Services.ServiceInitializer
             await InitProducts();
             await _companiesRatingService.Init();
             await _gameEconomyService.Init();
+            _gameTimeService.Init();
         }
 
         private void InitBanks()
