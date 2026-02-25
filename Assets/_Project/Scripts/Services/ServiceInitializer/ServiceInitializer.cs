@@ -25,20 +25,22 @@ namespace Services.ServiceInitializer
         private IAutoSaveService _autoSaveService;
         private IGameSaveService _gameSaveService;
         private ICompaniesService _companiesService;
-        private IProductService _productService;
+        private IContractService _contractService;
         private IBanksProvidersProvider _banksProvidersProvider;
         private IBanksFactory _banksFactory;
+        private IContractMarketService _contractMarketService;
 
         [Inject]
         private void Construct(IGameEconomyService gameEconomyService, IGameTimeService gameTimeService, ICharactersService charactersService, IHiringService hiringService,
             ISettingsInitializer settingsInitializer, ICompaniesRatingService companiesRatingService, IAutoSaveService autoSaveService,
-            IGameSaveService gameSaveService, ICompaniesService companiesService, IProductService productService,
-            IBanksProvidersProvider banksProvidersProvider, IBanksFactory banksFactory
+            IGameSaveService gameSaveService, ICompaniesService companiesService, IContractService contractService,
+            IBanksProvidersProvider banksProvidersProvider, IBanksFactory banksFactory, IContractMarketService contractMarketService
             )
         {
+            _contractMarketService = contractMarketService;
             _banksFactory = banksFactory;
             _banksProvidersProvider = banksProvidersProvider;
-            _productService = productService;
+            _contractService = contractService;
             _companiesService = companiesService;
             _gameSaveService = gameSaveService;
             _autoSaveService = autoSaveService;
@@ -59,9 +61,10 @@ namespace Services.ServiceInitializer
             await _autoSaveService.Init();
             await _hiringService.Init();
             await InitCompanies();
-            await InitProducts();
+            await InitContracts();
             await _companiesRatingService.Init();
             await _gameEconomyService.Init();
+            await _contractMarketService.Init();
             _gameTimeService.Init();
         }
 
@@ -69,7 +72,8 @@ namespace Services.ServiceInitializer
         {
             _banksFactory.CreateFloatBankWithId(BankId.CleanMoney, 0);
             _banksFactory.CreateFloatBankWithId(BankId.DirtyMoney, 0);
-            _banksFactory.CreateIntBankWithId(BankId.FruitsBank, 0);
+            _banksFactory.CreateFloatBankWithId(BankId.Reputation, 0);
+            _banksFactory.CreateFloatBankWithId(BankId.Heat, 0);
         }
 
         private async Task InitCompanies()
@@ -78,11 +82,11 @@ namespace Services.ServiceInitializer
                 _companiesService.InjectGameSave(_gameSaveService.GetCurrentData());
             await _companiesService.Init();
         }
-        private async Task InitProducts()
+        private async Task InitContracts()
         {
             if (_gameSaveService.IsGameLoaded())
                 await UnityMainThreadDispatcher.Instance().EnqueueAsync(() =>
-                    _productService.InjectGameSave(_gameSaveService.GetCurrentData()));
+                    _contractService.InjectGameSave(_gameSaveService.GetCurrentData()));
             // await _productService.Init();
         }
         

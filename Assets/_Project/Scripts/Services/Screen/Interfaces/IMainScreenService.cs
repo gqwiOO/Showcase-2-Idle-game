@@ -9,7 +9,7 @@ namespace Services.Screen.Interfaces
     public interface IMainScreenService
     {
         UniTask ShowCharacterProductsScreen(string characterKey);
-        UniTask ShowProductScreen(IProductData productData);
+        UniTask ShowContractScreen(IContractData contractData);
         UniTask ShowHiringScreen();
         UniTask ShowConfirmHiringScreen(ICharacterData characterData);
         UniTask ShowCreateProductScreen();
@@ -20,5 +20,7 @@ namespace Services.Screen.Interfaces
         UniTask ShowCompaniesRatingScreen();
         UniTask ShowDayResultScreen(DaySummaryData data);
         UniTask ShowLaunderMoneyScreen();
+        UniTask ShowContractMarketScreen();
+        UniTask ShowTakeContractScreen(IContractData offer);
     }
 }

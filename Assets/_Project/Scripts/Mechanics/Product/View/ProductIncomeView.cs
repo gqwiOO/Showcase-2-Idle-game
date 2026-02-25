@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 
 namespace Mechanics.Product
@@ -12,6 +12,6 @@ namespace Mechanics.Product
         private string suffix;
 
         public override void UpdateView()
-            => _text.text = productData.IncomePerMonth.ToString("0.00") + suffix;
+            => _text.text = contractData.RewardAmount.ToString("0.00") + suffix;
     }
 }

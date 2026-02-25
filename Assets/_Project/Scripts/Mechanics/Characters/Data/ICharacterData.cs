@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Mechanics.Product;
+using System.Collections.Generic;
 
 namespace Mechanics.Characters
 {
@@ -12,19 +11,20 @@ namespace Mechanics.Characters
         public CharacterSkill CharacterSkill { get; }
         public int Salary { get; }
         public string CompanyKey { get; }
-        
-        public IEnumerable<string> Products { get; }
-        public IEnumerable<string> ProductsInDeveloping { get; }
-        public int ProductsInDevelopingCount { get;  }
+        public bool IsInjured { get; }
 
-        // public int Efficiency { get; }
-        void AddProduct(string productData);
-        void DeleteProduct(string productData);
+        /// <summary>Contract keys (was Products).</summary>
+        public IEnumerable<string> Contracts { get; }
+        /// <summary>Contracts in execution (was ProductsInDeveloping).</summary>
+        public IEnumerable<string> ContractsInExecution { get; }
+        public int ContractsInExecutionCount { get; }
 
-        public void AddDevelopmentProduct(string productData);
+        void AddContract(string contractKey);
+        void DeleteContract(string contractKey);
+        void AddContractInExecution(string contractKey);
+        void RemoveContractInExecution(string contractKey);
+        void SetInjured(bool injured);
 
-        public void RemoveDevelopmentProduct(string productData);
-        
         bool HasCompany();
         void SetCompanyKey(string key);
     }

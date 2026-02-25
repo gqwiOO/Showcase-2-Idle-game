@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Mechanics.Characters;
 using Sirenix.Utilities;
@@ -6,18 +6,18 @@ using Zenject;
 
 namespace Mechanics.Product.Provider
 {
-    public interface IProductsProvider
+    public interface IContractsProvider
     {
-        IProductData GetProduct(string key);
-        IEnumerable<IProductData> GetAllProductOfCharacter(string characterKey);
-        IEnumerable<IProductData> GetAllProduct();
-        void AddProduct(IProductData key);
-        void RemoveProduct(string key);
+        IContractData GetContract(string key);
+        IEnumerable<IContractData> GetAllContractsOfCharacter(string characterKey);
+        IEnumerable<IContractData> GetAllContracts();
+        void AddContract(IContractData contract);
+        void RemoveContract(string key);
     }
-    
-    public class ProductsProvider : IProductsProvider
+
+    public class ContractsProvider : IContractsProvider
     {
-        private readonly Dictionary<string, IProductData> _products = new();
+        private readonly Dictionary<string, IContractData> _contracts = new();
         private ICharactersProvider _charactersProvider;
 
         [Inject]
@@ -25,40 +25,37 @@ namespace Mechanics.Product.Provider
         {
             _charactersProvider = charactersProvider;
         }
-        
 
-        public IProductData GetProduct(string key)
+        public IContractData GetContract(string key)
         {
-            _products.TryGetValue(key, out var product);
-            return product;
+            _contracts.TryGetValue(key, out var contract);
+            return contract;
         }
 
-        public IEnumerable<IProductData> GetAllProductOfCharacter(string characterKey)
+        public IEnumerable<IContractData> GetAllContractsOfCharacter(string characterKey)
         {
             var character = _charactersProvider.GetCharacterByKey(characterKey);
-            var productsKeys = character.Products;
+            var contractKeys = character.Contracts;
 
-            List<IProductData> result = new(productsKeys.Count());
-            
-            productsKeys.ForEach(key =>
+            List<IContractData> result = new(contractKeys.Count());
+            contractKeys.ForEach(k =>
             {
-                _products.TryGetValue(key, out var product);
-                result.Add(product);
+                _contracts.TryGetValue(k, out var contract);
+                if (contract != null) result.Add(contract);
             });
-
             return result;
         }
 
-        public IEnumerable<IProductData> GetAllProduct() => _products.Values;
+        public IEnumerable<IContractData> GetAllContracts() => _contracts.Values;
 
-        public void AddProduct(IProductData product)
+        public void AddContract(IContractData contract)
         {
-            _products.TryAdd(product.Key, product);
+            _contracts.TryAdd(contract.Key, contract);
         }
 
-        public void RemoveProduct(string key)
+        public void RemoveContract(string key)
         {
-            _products.Remove(key);
+            _contracts.Remove(key);
         }
     }
 }

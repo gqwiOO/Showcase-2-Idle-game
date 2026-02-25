@@ -7,6 +7,7 @@ using Core.Storage.Bank;
 using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.Product;
+using Mechanics.Product;
 using Mechanics.Product.Provider;
 using PimDeWitte.UnityMainThreadDispatcher;
 using UnityEngine;
@@ -21,11 +22,13 @@ namespace Mechanics.GameSave
         private readonly ICompaniesProvider _companiesProvider;
         private readonly ICharactersProvider _charactersProvider;
         private GameData _gameData;
-        private IProductsProvider _productsProvider;
+        private IContractsProvider _contractsProvider;
         private IBanksProvidersProvider _banksProvidersProvider;
         
         private IDataBank<float> _cleanWallet;
         private IDataBank<float> _dirtyWallet;
+        private IDataBank<float> _reputationWallet;
+        private IDataBank<float> _heatWallet;
 
         public IEnumerable<ICompanyData> Companies => _gameData.Companies;
         public IEnumerable<ICharacterData> Characters  => _gameData.Characters;
@@ -33,10 +36,10 @@ namespace Mechanics.GameSave
         public float MoneyAmount  => _gameData.CleanMoneyAmount;
 
         public GameSaveService(ICompaniesProvider companiesProvider, ICharactersProvider charactersProvider,
-            IProductsProvider productsProvider, IBanksProvidersProvider banksProvidersProvider)
+            IContractsProvider contractsProvider, IBanksProvidersProvider banksProvidersProvider)
         {
             _banksProvidersProvider = banksProvidersProvider;
-            _productsProvider = productsProvider;
+            _contractsProvider = contractsProvider;
             _companiesProvider = companiesProvider;
             _charactersProvider = charactersProvider;
         }
@@ -45,6 +48,8 @@ namespace Mechanics.GameSave
         {
             _cleanWallet = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.CleanMoney);
             _dirtyWallet = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.DirtyMoney);
+            _reputationWallet = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.Reputation);
+            _heatWallet = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.Heat);
             await LoadLastGame();
         }
 
@@ -52,18 +57,20 @@ namespace Mechanics.GameSave
         {
             var companies = _companiesProvider.GetAllCompanies();
             var characters = _charactersProvider.GetAllCharacter();
-            var products = _productsProvider.GetAllProduct();
+            var contracts = _contractsProvider.GetAllContracts();
             var myCharacter = (CharacterData)_charactersProvider.GetMyCharacter();
 
             var gameData = new GameData
             {
                 Companies = new List<CompanyData>(companies.Select(item => (CompanyData)item)),
                 Characters = new List<CharacterData>(characters.Select(item => (CharacterData)item)),
-                Products = new List<GameProductData>(products.Select(item => (GameProductData)item)),
+                Contracts = new List<ContractData>(contracts.Select(item => (ContractData)item)),
                 MyCharacter = myCharacter,
                 MoneyAmount = _cleanWallet.GetValue(),
                 CleanMoneyAmount = _cleanWallet.GetValue(),
-                DirtyMoneyAmount = _dirtyWallet.GetValue()
+                DirtyMoneyAmount = _dirtyWallet.GetValue(),
+                ReputationAmount = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.Reputation).GetValue(),
+                HeatAmount = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.Heat).GetValue()
             };
 
             return  Newtonsoft.Json.JsonConvert.SerializeObject(gameData);
@@ -81,8 +88,12 @@ namespace Mechanics.GameSave
             
             var cleanAmount = _gameData.CleanMoneyAmount > 0 ? _gameData.CleanMoneyAmount : _gameData.MoneyAmount;
             var dirtyAmount = _gameData.DirtyMoneyAmount;
+            var reputationAmount = _gameData.ReputationAmount;
+            var heatAmount = _gameData.HeatAmount;
             _cleanWallet.SetValue(cleanAmount);
             _dirtyWallet.SetValue(dirtyAmount);
+            _reputationWallet.SetValue(reputationAmount);
+            _heatWallet.SetValue(heatAmount);
             return _gameData;
         }
 

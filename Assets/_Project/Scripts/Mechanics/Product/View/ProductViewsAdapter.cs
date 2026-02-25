@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mechanics.Product
@@ -7,8 +7,9 @@ namespace Mechanics.Product
     {
         [SerializeField] private List<ProductView> _views;
 
-        public IProductData ProductData => base.productData;        
-        public override void Init(IProductData data)
+        public IContractData ContractData => base.contractData;
+
+        public override void Init(IContractData data)
         {
             base.Init(data);
             _views.ForEach(view => view.Init(data));

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Mechanics.Companies;
 using Mechanics.GameSave;
 using Mechanics.Product;
@@ -41,22 +41,22 @@ namespace Mechanics.Characters
             }
         }
 
-        public void AddProductToCharacter(string characterKey, IProductData productData)
+        public void AddContractToCharacter(string characterKey, IContractData contractData)
         {
             var character = _charactersProvider.GetCharacterByKey(characterKey);
-            AddProductToCharacter(character,productData);
+            AddContractToCharacter(character, contractData);
         }
 
-        public void AddProductToCharacter(ICharacterData character, IProductData productData) 
-            => character.AddProduct(productData.Key);
+        public void AddContractToCharacter(ICharacterData character, IContractData contractData)
+            => character.AddContract(contractData.Key);
 
-        public void AddProductToCompany(ICompanyData company, IProductData productData) 
-            => company.AddProduct(productData.Key);
+        public void AddContractToCompany(ICompanyData company, IContractData contractData)
+            => company.AddContract(contractData.Key);
 
-        public void AddProductToCompany(string companyKey, IProductData productData)
+        public void AddContractToCompany(string companyKey, IContractData contractData)
         {
             var company = _companiesProvider.GetCompanyByOwnerKey(companyKey);
-            AddProductToCompany(company, productData);
+            AddContractToCompany(company, contractData);
         }
     }
 }

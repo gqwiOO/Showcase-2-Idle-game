@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Scripts.Debugging;
@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Mechanics.Product
 {
-    public class SelectDevelopersScreen: BaseScreen
+    public class SelectEmployeesScreen: BaseScreen
     {
         [SerializeField] private PoolGameObjects _pool;
         [SerializeField] private UIButton closeButton;
@@ -52,7 +52,7 @@ namespace Mechanics.Product
             {
                 var view = GetCharacterItem();
                 view.gameObject.SetActive(true);
-                view.transform.SetParent(_container, false);
+                view.transform.SetParent(_container);
                 view.OnSelected += DeveloperItem_OnSelected;
                 _views.Add(view);
             }
@@ -74,7 +74,7 @@ namespace Mechanics.Product
         private bool CanSelectDeveloper(ICharacterData employee)
         {
             return _currentScreenSessionSelectedDevelopersCount < _maxEmployeesToTake &&
-                   employee.ProductsInDevelopingCount < 1;
+                   employee.ContractsInExecutionCount < 1;
         }
 
         private void RemoveDeveloperFromList(ICharacterData employee)

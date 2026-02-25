@@ -1,14 +1,14 @@
-﻿using UI.View;
+using UI.View;
 
 namespace Mechanics.Product
 {
     public abstract class ProductView: BaseView
     {
-        protected IProductData productData;
+        protected IContractData contractData;
 
-        public virtual void Init(IProductData data)
+        public virtual void Init(IContractData data)
         {
-            productData = data;
+            contractData = data;
         }
 
     }

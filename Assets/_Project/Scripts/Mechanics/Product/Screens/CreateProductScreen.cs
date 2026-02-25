@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
@@ -37,7 +37,7 @@ namespace Mechanics.Product
 
         [Space]
         [SerializeField] 
-        private SelectDevelopersScreen _selectDevelopersScreen;
+        private SelectEmployeesScreen selectEmployeesScreen;
 
         private ICharacterData _myCharacter;
         
@@ -45,7 +45,7 @@ namespace Mechanics.Product
         private readonly List<ICharacterData> _currentSelectedEmployees = new ();
         
 
-        private IProductService _productService;
+        private IContractService _contractService;
         private ICharactersProvider _charactersProvider;
         private ICompaniesService _companiesService;
         private ICompaniesProvider _companiesProvider;
@@ -54,13 +54,13 @@ namespace Mechanics.Product
 
 
         [Inject]
-        private void Construct(IProductService productService, ICharactersProvider charactersProvider, ICompaniesService companiesService,
+        private void Construct(IContractService contractService, ICharactersProvider charactersProvider, ICompaniesService companiesService,
             ICompaniesProvider companiesProvider)
         {
             _companiesProvider = companiesProvider;
             _companiesService = companiesService;
             _charactersProvider = charactersProvider;
-            _productService = productService;
+            _contractService = contractService;
         }
 
         public async UniTask Init()
@@ -73,7 +73,7 @@ namespace Mechanics.Product
 
         private void Start()
         {
-            _selectDevelopersScreen.OnDeveloperSelected += SelectDeveloperScreen_OnDeveloperSelected;
+            selectEmployeesScreen.OnDeveloperSelected += SelectEmployeeScreenOnEmployeeSelected;
             _createProductDevelopersView.OnDeveloperUnselected += CreateProductDevelopersView_OnDeveloperUnselected;
         }
 
@@ -83,7 +83,7 @@ namespace Mechanics.Product
             _createProductDevelopersView.Remove(obj);
         }
 
-        private void SelectDeveloperScreen_OnDeveloperSelected(ICharacterData data)
+        private void SelectEmployeeScreenOnEmployeeSelected(ICharacterData data)
         {
             _currentSelectedEmployees.Add(data);
             _createProductDevelopersView.Add(data);
@@ -91,8 +91,8 @@ namespace Mechanics.Product
 
         private void AddDeveloperButton_OnClicked()
         {
-            _selectDevelopersScreen.Open().Forget();
-            _selectDevelopersScreen.Init(GetNotSelectedEmployeesOnProduct(), MAX_DEVELOPERS_ON_PROJECT - _currentSelectedEmployees.Count);
+            selectEmployeesScreen.Open().Forget();
+            selectEmployeesScreen.Init(GetNotSelectedEmployeesOnProduct(), MAX_DEVELOPERS_ON_PROJECT - _currentSelectedEmployees.Count);
         }
 
         private List<ICharacterData> GetNotSelectedEmployeesOnProduct()
@@ -125,7 +125,7 @@ namespace Mechanics.Product
 
         private void GenerateGameName()
         {
-            _nameText.text = _productService.GetRandomGameNameWithGenre(_currentGenre);
+            _nameText.text = _contractService.GetRandomContractNameWithGenre(_currentGenre);
         }
 
         private void GameGenreDropDownView_OnGenreSelected(GameGenre obj) 
@@ -133,16 +133,15 @@ namespace Mechanics.Product
 
         private void CreateButton_OnClicked()
         {
-            CreateGameProductData createGameProductData = 
-                new CreateGameProductData(_nameText.text,
-                    _currentGenre,
-                    new DevelopingData(_currentSelectedEmployees.Select(item => (CharacterData)item).ToList()) ,
-                    Guid.NewGuid().ToString());
+            var contract = ContractData.Create(
+                Guid.NewGuid().ToString(),
+                _nameText.text,
+                new DevelopingData(_currentSelectedEmployees.Select(item => (CharacterData)item).ToList()),
+                rewardAmount: 50f);
 
-            _productService.CreateGameProduct(createGameProductData,_myCharacter.Key);
+            _contractService.TakeContract(contract, _myCharacter.Key);
 
             ResetView();
-            
             Hide().Forget();
         }
 

@@ -21,10 +21,10 @@ namespace Services.Screen
             await screen.Open();
         }
 
-        public async UniTask ShowProductScreen(IProductData productData)
+        public async UniTask ShowContractScreen(IContractData contractData)
         {
             var screen = GetScreen<ProductManageScreen>();
-            await screen.Init(productData);
+            await screen.Init(contractData);
             await screen.Open();
         }
 
@@ -94,6 +94,19 @@ namespace Services.Screen
         public async UniTask ShowLaunderMoneyScreen()
         {
             var screen = GetScreen<LaunderMoneyScreen>();
+            await screen.Open();
+        }
+
+        public async UniTask ShowContractMarketScreen()
+        {
+            var screen = GetScreen<ContractMarketScreen>();
+            await screen.Open();
+        }
+
+        public async UniTask ShowTakeContractScreen(IContractData offer)
+        {
+            var screen = GetScreen<TakeContractScreen>();
+            screen.Init(offer);
             await screen.Open();
         }
     }

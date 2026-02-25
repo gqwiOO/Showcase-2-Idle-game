@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -66,8 +66,8 @@ namespace Mechanics.CompaniesRating.Generator
             foreach (var characterData in employees)
                 company.AddEmployee(characterData.Key);
             
-            foreach (var product in products)
-                company.AddProduct(product.Key);
+            foreach (var contract in products)
+                company.AddContract(contract.Key);
 
             owner.SetCompanyKey(company.Key);
             companies.Add(company);
@@ -118,18 +118,18 @@ namespace Mechanics.CompaniesRating.Generator
             return characterData;
         }
 
-        private async Task<List<IProductData>> GenerateCompanyProducts(CompanySettingsByTier settings, ProductsGeneratingSettings productsGeneratingSettings)
+        private async Task<List<IContractData>> GenerateCompanyProducts(CompanySettingsByTier settings, ProductsGeneratingSettings productsGeneratingSettings)
         {
-            var result = new List<IProductData>();
+            var result = new List<IContractData>();
 
-            int productsCount = new Random().Next((int)settings.ProductsCountRange.x, (int)settings.ProductsCountRange.y);
+            int contractsCount = new Random().Next((int)settings.ProductsCountRange.x, (int)settings.ProductsCountRange.y);
 
             var random = new Random();
 
-            var tasks = new List<Task>(productsCount);
-            for (int i = 0; i < productsCount; i++)
+            var tasks = new List<Task>(contractsCount);
+            for (int i = 0; i < contractsCount; i++)
             {
-                tasks.Add(CreateProduct(productsGeneratingSettings, random, result));
+                tasks.Add(CreateContract(productsGeneratingSettings, random, result));
             }
 
             await Task.WhenAll(tasks);
@@ -137,7 +137,7 @@ namespace Mechanics.CompaniesRating.Generator
             return result;
         }
 
-        private Task CreateProduct(ProductsGeneratingSettings productsGeneratingSettings, Random random, List<IProductData> result)
+        private Task CreateContract(ProductsGeneratingSettings productsGeneratingSettings, Random random, List<IContractData> result)
         {
             var genre = random.GetRandomValueExceptFirst<GameGenre>();
             var name = productsGeneratingSettings
@@ -145,10 +145,10 @@ namespace Mechanics.CompaniesRating.Generator
                 .First(item => item.Genre == genre)
                 .Names
                 .PickRandom();
-                
-            var createProductData = new CreateGameProductData(name,genre,null,Guid.NewGuid().ToString(),ProductState.Released);
-            var product = new GameProductData(createProductData, true);
-            result.Add(product);
+
+            var contract = ContractData.Create(Guid.NewGuid().ToString(), name, null, 50f, 5f, 3f);
+            contract.ContractState = ContractState.Completed;
+            result.Add(contract);
 
             return Task.CompletedTask;
         }

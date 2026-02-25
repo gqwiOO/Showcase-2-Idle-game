@@ -12,12 +12,15 @@ namespace Mechanics.GameSave
         public int Key;
         public List<CompanyData> Companies;
         public List<CharacterData> Characters;
-        public List<GameProductData> Products;
+        [Newtonsoft.Json.JsonProperty("Products")]
+        public List<ContractData> Contracts;
 
         public CharacterData MyCharacter;
 
         public float MoneyAmount; // Legacy, maps to CleanMoneyAmount when loading
         public float CleanMoneyAmount;
         public float DirtyMoneyAmount;
+        public float ReputationAmount;
+        public float HeatAmount;
     }
 }

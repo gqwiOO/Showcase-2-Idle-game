@@ -1,4 +1,4 @@
-﻿using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Services.Screen;
 using UnityEngine;
 
@@ -8,9 +8,9 @@ namespace Mechanics.Product
     {
         [SerializeField] private ProductViewsAdapter _productViewsAdapter;
         
-        public async UniTask Init(IProductData productData)
+        public async UniTask Init(IContractData contractData)
         {
-            _productViewsAdapter.Init(productData);
+            _productViewsAdapter.Init(contractData);
             _productViewsAdapter.UpdateView();
         }
     }

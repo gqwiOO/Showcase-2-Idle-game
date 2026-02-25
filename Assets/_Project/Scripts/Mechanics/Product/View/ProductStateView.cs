@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 
 namespace Mechanics.Product
@@ -7,6 +7,6 @@ namespace Mechanics.Product
     {
         [SerializeField] private TMP_Text _stateText;
         public override void UpdateView() 
-            => _stateText.text = productData.ProductState.ToString();
+            => _stateText.text = contractData.ContractState.ToString();
     }
 }

@@ -1,23 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Mechanics.Characters;
 using Mechanics.Product;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Mechanics.Companies
 {
-    public interface ICompanyData: IIncomeObject
+    public interface ICompanyData : IIncomeObject
     {
         public string Key { get; }
         public string Name { get; }
         public IEnumerable<string> Employees { get; }
         public string Owner { get; }
-        public IEnumerable<string> Products { get; }
-        void AddProduct(string productData);
-        void DeleteProduct(string productData);
+        public IEnumerable<string> Contracts { get; }
+        void AddContract(string contractKey);
+        void DeleteContract(string contractKey);
         void AddEmployee(string employee);
-        void DeleteEmployee(string product);
+        void DeleteEmployee(string employee);
     }
 
     [Serializable]
@@ -50,26 +49,26 @@ namespace Mechanics.Companies
 
         [field: SerializeField]
         public IEnumerable<string> Employees => _employees;
-        private List<string> _products { get; set; } = new();
-        
-        [field: SerializeField]
-        public IEnumerable<string> Products => _products;
+
+        [JsonProperty("_products")]
+        private List<string> _contracts { get; set; } = new();
+
+        public IEnumerable<string> Contracts => _contracts;
 
         public event Action OnIncomeChanged;
-        
-        public event Action OnProductsChanged;
-        
+        public event Action OnContractsChanged;
         public event Action OnEmployeesChanged;
-        
-        public void AddProduct(string productData)
+
+        public void AddContract(string contractKey)
         {
-            _products.Add(productData);
-            OnProductsChanged?.Invoke();
+            _contracts.Add(contractKey);
+            OnContractsChanged?.Invoke();
         }
-        public void DeleteProduct(string productData)
+
+        public void DeleteContract(string contractKey)
         {
-            _products.Remove(productData);
-            OnProductsChanged?.Invoke();
+            _contracts.Remove(contractKey);
+            OnContractsChanged?.Invoke();
         }
 
         public void AddEmployee(string employee)

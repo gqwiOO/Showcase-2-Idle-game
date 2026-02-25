@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Core.Scripts.Pools;
 using Cysharp.Threading.Tasks;
@@ -29,16 +29,16 @@ namespace Mechanics.Product
         private ICompaniesProvider _companiesProvider;
         private ICharactersProvider _charactersProvider;
         private IMainScreenService _mainScreenService;
-        private IProductService _productService;
+        private IContractService _contractService;
         private string _characterKey;
-        private IProductsProvider _productsProvider;
+        private IContractsProvider _contractsProvider;
 
         [Inject]
         private void Construct(ICompaniesProvider companiesProvider, ICharactersProvider charactersProvider, IMainScreenService mainScreenService,
-            IProductService productService, IProductsProvider productsProvider)
+            IContractService contractService, IContractsProvider contractsProvider)
         {
-            _productsProvider = productsProvider;
-            _productService = productService;
+            _contractsProvider = contractsProvider;
+            _contractService = contractService;
             _mainScreenService = mainScreenService;
             _charactersProvider = charactersProvider;
             _companiesProvider = companiesProvider;
@@ -47,7 +47,7 @@ namespace Mechanics.Product
         private void Start()
         {
             _createGameButton.OnClicked += CreateButton_OnClicked;
-            _productService.OnNewGameProductAdded += ProductService_OnNewGameProductCreated;
+            _contractService.OnContractTaken += ContractService_OnContractTaken;
         }
 
         private void OnDestroy()
@@ -55,7 +55,7 @@ namespace Mechanics.Product
             _createGameButton.OnClicked -= CreateButton_OnClicked;
         }
 
-        private void ProductService_OnNewGameProductCreated(IGameProductData productData) 
+        private void ContractService_OnContractTaken(IContractData contractData)
             => Init(_characterKey).Forget();
 
         private void CreateButton_OnClicked()
@@ -74,27 +74,27 @@ namespace Mechanics.Product
             _productsPool.Init();
             _characterData = characterData;
 
-            List<string> characterProducts = new(_characterData.Products);
+            List<string> characterContracts = new(_characterData.Contracts);
 
             if (!_characterData.CompanyKey.IsEmpty())
             {
-                var products = _companiesProvider.GetCompanyByOwnerKey(_characterData.Key).Products;
-                characterProducts.AddRange(products);
+                var contracts = _companiesProvider.GetCompanyByOwnerKey(_characterData.Key).Contracts;
+                characterContracts.AddRange(contracts);
             }
 
-            await InitProducts(characterProducts);
+            await InitContracts(characterContracts);
         }
 
-        private async UniTask InitProducts(List<string> characterProducts)
+        private async UniTask InitContracts(List<string> characterContracts)
         {
-            int productCount = characterProducts.Count;
+            int contractCount = characterContracts.Count;
 
-            for (int i = 0; i < productCount; i++)
+            for (int i = 0; i < contractCount; i++)
             {
                 ProductViewsAdapter view;
+                var contractData = _contractsProvider.GetContract(characterContracts[i]);
+                if (contractData == null) continue;
 
-                
-                var productData = _productsProvider.GetProduct(characterProducts[i]);
                 if (i < _activeViews.Count)
                 {
                     view = _activeViews[i];
@@ -104,25 +104,23 @@ namespace Mechanics.Product
                     var productItem = GetProductItem();
                     view = productItem.ProductViewsAdapter;
                     _activeViews.Add(view);
-                    productItem.OnProductItemClicked += ProductionItem_OnClicked;
-                    productItem.Init(productData);
+                    productItem.OnProductItemClicked += ContractItem_OnClicked;
+                    productItem.Init(contractData);
                 }
 
                 view.gameObject.SetActive(true);
-                view.Init(productData);
+                view.Init(contractData);
                 view.UpdateView();
-                
             }
 
-            for (int i = productCount; i < _activeViews.Count; i++)
+            for (int i = contractCount; i < _activeViews.Count; i++)
             {
                 _activeViews[i].gameObject.SetActive(false);
             }
         }
 
-        private void ProductionItem_OnClicked(IProductData data)
+        private void ContractItem_OnClicked(IContractData data)
         {
-            
         }
 
         private ProductItem GetProductItem()

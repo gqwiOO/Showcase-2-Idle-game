@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,19 +12,29 @@ namespace Mechanics.Companies
     {
         private ICompaniesProvider _companiesProvider;
         private ICharactersProvider _charactersProvider;
+        private IGameSaveService _gameSaveService;
+
+        private const string DefaultCompanyName = "Hotel";
 
         public event Action<ICompanyData> OnAnyCompanyUpdated;
 
         [Inject]
-        private void Construct(ICompaniesProvider companiesProvider, ICharactersProvider charactersProvider)
+        private void Construct(ICompaniesProvider companiesProvider, ICharactersProvider charactersProvider,
+            IGameSaveService gameSaveService)
         {
             _charactersProvider = charactersProvider;
             _companiesProvider = companiesProvider;
+            _gameSaveService = gameSaveService;
         }
 
         public async Task Init()
         {
-            
+            if (!_gameSaveService.IsGameLoaded())
+            {
+                var myCharacter = _charactersProvider.GetMyCharacter();
+                if (myCharacter != null)
+                    CreateCompany(new CompanyCreateData(DefaultCompanyName, myCharacter.Key));
+            }
         }
 
         public void InjectGameSave(GameData gameSave)

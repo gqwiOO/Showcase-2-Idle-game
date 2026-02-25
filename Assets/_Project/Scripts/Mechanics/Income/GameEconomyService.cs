@@ -9,8 +9,6 @@ using Core.Storage.Bank;
 using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.DayNight;
-using Mechanics.Product;
-using Mechanics.Product.Provider;
 using Zenject;
 
 namespace Mechanics.Income
@@ -18,11 +16,12 @@ namespace Mechanics.Income
     public class GameEconomyService : IGameEconomyService, IUpdatable
     {
         private readonly Dictionary<string, float> _companiesIncomes = new();
-        private readonly Dictionary<string, float> _productsIncomes = new();
         private readonly Dictionary<string, float> _charactersIncomes = new();
 
         private IDataBank<float> _cleanBank;
         private IDataBank<float> _dirtyBank;
+        private IDataBank<float> _reputationBank;
+        private IDataBank<float> _heatBank;
         private ICharacterData _myCharacter;
 
         private ICompaniesProvider _companiesProvider;
@@ -32,7 +31,6 @@ namespace Mechanics.Income
         private IUpdateService _updateService;
         private ICompaniesService _companiesService;
         private ICharacterCompanyListener _characterCompanyListener;
-        private IProductsProvider _productsProvider;
         private IGameTimeService _gameTimeService;
 
         public event Action OnMyPlayerIncomeChanged;
@@ -42,6 +40,8 @@ namespace Mechanics.Income
         public event Action<float> OnCleanBalanceChanged;
 
         public event Action<float> OnDirtyBalanceChanged;
+        public event Action<float> OnReputationChanged;
+        public event Action<float> OnHeatChanged;
 
         public UpdateType UpdateType => UpdateType.Update;
 
@@ -49,11 +49,10 @@ namespace Mechanics.Income
         [Inject]
         private void Construct(ICompaniesProvider companiesProvider, ICharactersProvider charactersProvider,
             IBanksProvidersProvider banksProvidersProvider, IUpdateService updateService, ICompaniesService companiesService,
-            ICharacterCompanyListener characterCompanyListener, IProductsProvider productsProvider,
+            ICharacterCompanyListener characterCompanyListener,
             IGameTimeService gameTimeService)
         {
             _gameTimeService = gameTimeService;
-            _productsProvider = productsProvider;
             _characterCompanyListener = characterCompanyListener;
             _companiesService = companiesService;
             _updateService = updateService;
@@ -71,6 +70,8 @@ namespace Mechanics.Income
 
             _cleanBank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.CleanMoney);
             _dirtyBank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.DirtyMoney);
+            _reputationBank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.Reputation);
+            _heatBank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.Heat);
             _myCharacter = _charactersProvider.GetMyCharacter();
             
             _characterCompanyListener.OnMyCharacterCompanyDataChanged += CharacterCompanyListenerOnOnMyCharacterCompanyDataChanged;
@@ -137,6 +138,23 @@ namespace Mechanics.Income
             OnDirtyBalanceChanged?.Invoke(_dirtyBank.GetValue());
         }
 
+        public void AddReputation(float amount)
+        {
+            if (amount <= 0) return;
+            _reputationBank.Add(amount);
+            OnReputationChanged?.Invoke(_reputationBank.GetValue());
+        }
+
+        public void AddHeat(float amount)
+        {
+            if (amount <= 0) return;
+            _heatBank.Add(amount);
+            OnHeatChanged?.Invoke(_heatBank.GetValue());
+        }
+
+        public float GetReputation() => _reputationBank.GetValue();
+        public float GetHeat() => _heatBank.GetValue();
+
         public float GetCompanyIncomePerMonth(string companyKey)
         {
             if (_companiesIncomes.TryGetValue(companyKey, out var result))
@@ -157,46 +175,26 @@ namespace Mechanics.Income
 
         private void CalculateCompanyIncomePerMonth(string companyKey)
         {
-            var result = 0f;
             var company = _companiesProvider.GetCompanyByKey(companyKey);
-            var ownerProducts = _charactersProvider.GetCharacterByKey(company.Owner).Products;
-
-            foreach (var data in company.Products.Select(item => _productsProvider.GetProduct(item)))
-                result += data.IncomePerMonth;
-            
-            foreach (var data in ownerProducts.Select(item => _productsProvider.GetProduct(item)))
-                result += data.IncomePerMonth;
-            
-            foreach (var data in company.Employees.Select(item => _charactersProvider.GetCharacterByKey(item)))
-                result += data.Salary;
-            
+            var result = -_companiesService.GetCompanyEmployeesSalary(companyKey);
             _companiesIncomes.TryAdd(companyKey, result);
         }
 
-        public float GetProductIncomePerMonth(string productKey) 
-            => _productsIncomes[productKey];
-
         private float CalculateCharacterIncomePerMonth(ICharacterData characterData)
         {
-            float characterProductsIncome = 0f;
             if (characterData == null)
-                return characterProductsIncome;
-            foreach (string productKey in characterData.Products.Where(item =>
-                         _productsProvider.GetProduct(item)?.ProductState == ProductState.Released))
-            {
-                var item = _productsProvider.GetProduct(productKey);
-                characterProductsIncome += item.IncomePerMonth;
-            }
+                return 0f;
+            var result = -_companiesService.GetCompanyEmployeesSalary(characterData.CompanyKey);
 
-            characterProductsIncome -= _companiesService.GetCompanyEmployeesSalary(characterData.CompanyKey);
-            
-            if(_charactersIncomes.ContainsKey(characterData.Key))
-                _charactersIncomes[characterData.Key] = characterProductsIncome;
-            
+            if (_charactersIncomes.ContainsKey(characterData.Key))
+                _charactersIncomes[characterData.Key] = result;
+            else
+                _charactersIncomes.TryAdd(characterData.Key, result);
+
             if (characterData == _myCharacter)
                 OnMyPlayerIncomeChanged?.Invoke();
-            
-            return characterProductsIncome;
+
+            return result;
         }
 
         private float GetIncomePerTick(float tick, ICharacterData characterData)

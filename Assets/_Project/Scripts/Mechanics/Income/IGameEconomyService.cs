@@ -17,13 +17,18 @@ namespace Mechanics.Income
         float GetDirtyBalance();
         void AddCleanMoney(float amount);
         void AddDirtyMoney(float amount);
+        void AddReputation(float amount);
+        void AddHeat(float amount);
+        float GetReputation();
+        float GetHeat();
         float GetCompanyIncomePerMonth(string companyKey);
-        float GetProductIncomePerMonth(string productKey);
         float GetCharacterIncomePerMonth(ICharacterData characterData);
 
         event Action<float> OnPlayerBalanceChanged;
         event Action<float> OnCleanBalanceChanged;
         event Action<float> OnDirtyBalanceChanged;
+        event Action<float> OnReputationChanged;
+        event Action<float> OnHeatChanged;
         event Action OnMyPlayerIncomeChanged;
         void ManualUpdateIncome(string characterKey);
     }

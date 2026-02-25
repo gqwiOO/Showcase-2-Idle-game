@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 
 namespace Mechanics.Product
@@ -9,6 +9,6 @@ namespace Mechanics.Product
         private TMP_Text _text;
         
         public override void UpdateView() 
-            => _text.text = productData.Name;
+            => _text.text = contractData.Name;
     }
 }

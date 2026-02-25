@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Mechanics.Product
@@ -7,21 +7,21 @@ namespace Mechanics.Product
     {
         [SerializeField] private Image _barImage;
 
-        public override void Init(IProductData data)
+        public override void Init(IContractData data)
         {
-            if(productData is { DevelopingData: not null }) 
-                productData.DevelopingData.OnProgressUpdated -= DevelopingData_OnProgressUpdated;
+            if (contractData is { ExecutionData: not null })
+                contractData.ExecutionData.OnProgressUpdated -= ExecutionData_OnProgressUpdated;
 
             base.Init(data);
 
-            if (productData.DevelopingData != null)
+            if (contractData.ExecutionData != null)
             {
-                productData.DevelopingData.OnProgressUpdated += DevelopingData_OnProgressUpdated;
-                DevelopingData_OnProgressUpdated(productData.DevelopingData.CurrentProgress);
+                contractData.ExecutionData.OnProgressUpdated += ExecutionData_OnProgressUpdated;
+                ExecutionData_OnProgressUpdated(contractData.ExecutionData.CurrentProgress);
             }
         }
 
-        private void DevelopingData_OnProgressUpdated(float newValue) 
+        private void ExecutionData_OnProgressUpdated(float newValue)
             => _barImage.fillAmount = newValue;
 
         public override void UpdateView()

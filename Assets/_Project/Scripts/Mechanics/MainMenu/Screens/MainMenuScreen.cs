@@ -1,4 +1,4 @@
-﻿using Mechanics.Characters;
+using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.Income.View;
 using Services.Screen;
@@ -11,7 +11,7 @@ namespace Mechanics.MainMenu.Screens
 {
     public class MainMenuScreen: BaseScreen
     {
-        [SerializeField] private BaseToggle _productsToggle;
+        [SerializeField] private BaseToggle _contractsMarketToggle;
         [SerializeField] private BaseToggle _roomToggle;
         [SerializeField] private BaseToggle _hireToggle;
         [SerializeField] private BaseToggle _companyToggle;
@@ -31,7 +31,8 @@ namespace Mechanics.MainMenu.Screens
 
         private void Start()
         {
-            _productsToggle.OnValidClick += ProductsToggle_OnClick;
+            if (_contractsMarketToggle != null)
+                _contractsMarketToggle.OnValidClick += ContractsMarketToggle_OnClick;
             _roomToggle.OnValidClick += RoomToggle_OnClick;
             _hireToggle.OnValidClick += HireToggle_OnClick;
             _companyToggle.OnValidClick += CompanyToggle_OnClick;
@@ -59,7 +60,8 @@ namespace Mechanics.MainMenu.Screens
 
         private void OnDestroy()
         {
-            _productsToggle.OnValidClick -= ProductsToggle_OnClick;
+            if (_contractsMarketToggle != null)
+                _contractsMarketToggle.OnValidClick -= ContractsMarketToggle_OnClick;
             _roomToggle.OnValidClick -= RoomToggle_OnClick;
             _hireToggle.OnValidClick -= HireToggle_OnClick;
             _companyToggle.OnValidClick -= CompanyToggle_OnClick;
@@ -69,6 +71,12 @@ namespace Mechanics.MainMenu.Screens
         {
             _mainScreenService.HideAllScreens();
             _mainScreenService.ShowCharacterProductsScreen(_myCharacterData.Key);
+        }
+
+        private void ContractsMarketToggle_OnClick()
+        {
+            _mainScreenService.HideAllScreens();
+            _mainScreenService.ShowContractMarketScreen();
         }
     }
 }

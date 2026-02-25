@@ -17,10 +17,7 @@ namespace Mechanics.Hiring.Screens
     {
         [SerializeField] 
         private RectTransform _container;
-    
-        [SerializeField] 
-        private RectTransform _noCompanyContainer;
-    
+        
         [SerializeField] 
         private RectTransform _withCompanyContainer;
 
@@ -56,17 +53,6 @@ namespace Mechanics.Hiring.Screens
         public async UniTask Init()
         {
             _pool.Init();
-
-            if (!_charactersProvider.GetMyCharacter().HasCompany())
-            {
-                _noCompanyContainer.gameObject.SetActive(true);
-                _withCompanyContainer.gameObject.SetActive(false);
-            }
-            else
-            {
-                _noCompanyContainer.gameObject.SetActive(false);
-                _withCompanyContainer.gameObject.SetActive(true);
-            }
             InitViewItems();
         }
 
@@ -91,7 +77,7 @@ namespace Mechanics.Hiring.Screens
             {
                 var view = GetCharacterItem();
                 view.gameObject.SetActive(true);
-                view.transform.SetParent(_container, false);
+                view.transform.SetParent(_container);
                 _views.Add(view);
             }
         }
