@@ -1,13 +1,12 @@
 using System;
 using Core.Scripts.Services.UpdateService;
-using Mechanics.Income;
 using UnityEngine;
 using Zenject;
 using static Mechanics.DayNight.DayNightPhase;
 
 namespace Mechanics.DayNight
 {
-    public class GameTimeService : IGameTimeService, IUpdatable
+    public class GameTimeService : IGameTimeService, IGameTimeBalanceInput, IUpdatable
     {
         private readonly DayNightConfig _config;
         private readonly IUpdateService _updateService;
@@ -20,7 +19,6 @@ namespace Mechanics.DayNight
         private float _previousBalance;
         private float _earnedDuringDay;
         private float _spentDuringDay;
-        private IGameEconomyService _gameEconomyService;
         private float _timeSpeed = 1f;
 
         public DayNightPhase CurrentPhase => _currentPhase;
@@ -69,34 +67,33 @@ namespace Mechanics.DayNight
             Core.Scripts.Services.UpdateService.UpdateType.Update;
 
         [Inject]
-        public GameTimeService(DayNightConfig config, IUpdateService updateService,
-            IGameEconomyService gameEconomyService)
+        public GameTimeService(DayNightConfig config, IUpdateService updateService)
         {
-            _gameEconomyService = gameEconomyService;
             _config = config;
             _updateService = updateService;
         }
 
         public void Init()
         {
-            _balanceAtDayStart = GetPlayerBalance();
             _previousBalance = _balanceAtDayStart;
-            _gameEconomyService.OnPlayerBalanceChanged += OnBalanceChanged;
             _updateService.Add(this);
         }
 
-        private float GetPlayerBalance() => _gameEconomyService.GetCleanBalance();
-
-        private void OnBalanceChanged(float newBalance)
+        public void NotifyBalanceChanged(float newBalance)
         {
             if (_currentPhase != Day) return;
-
             float delta = newBalance - _previousBalance;
             if (delta > 0)
                 _earnedDuringDay += delta;
             else if (delta < 0)
                 _spentDuringDay += Math.Abs(delta);
             _previousBalance = newBalance;
+        }
+
+        public void NotifyDayStarted(float startBalance)
+        {
+            _balanceAtDayStart = startBalance;
+            _previousBalance = startBalance;
         }
 
         public void Tick(float deltaTime)
@@ -133,7 +130,6 @@ namespace Mechanics.DayNight
 
             if (newPhase == Day)
             {
-                _balanceAtDayStart = GetPlayerBalance();
                 _previousBalance = _balanceAtDayStart;
                 _earnedDuringDay = 0f;
                 _spentDuringDay = 0f;
@@ -142,7 +138,6 @@ namespace Mechanics.DayNight
 
         private void CompleteDay()
         {
-            float endBalance = GetPlayerBalance();
             var summary = new DaySummaryData
             {
                 Results =
@@ -150,7 +145,6 @@ namespace Mechanics.DayNight
                     new DayIncomeResult
                     {
                         StartBalance = _balanceAtDayStart,
-                        EndBalance = endBalance,
                         Earned = _earnedDuringDay,
                         Spent = _spentDuringDay
                     }

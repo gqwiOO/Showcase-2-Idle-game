@@ -3,6 +3,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.Config;
 using Services.Screen;
 using TMPro;
 using UI.Buttons;
@@ -32,14 +33,16 @@ namespace Mechanics.Product
         private IContractMarketService _marketService;
         private ICharactersProvider _charactersProvider;
         private ICompaniesService _companiesService;
+        private ContractProductLimitsConfig _limitsConfig;
 
         [Inject]
         private void Construct(IContractMarketService marketService, ICharactersProvider charactersProvider,
-            ICompaniesService companiesService)
+            ICompaniesService companiesService, ContractProductLimitsConfig limitsConfig)
         {
             _marketService = marketService;
             _charactersProvider = charactersProvider;
             _companiesService = companiesService;
+            _limitsConfig = limitsConfig;
         }
 
         private void Start()
@@ -80,7 +83,7 @@ namespace Mechanics.Product
         private void OnAddAssigneeClicked()
         {
             var available = GetAvailableAssignees().Where(a => !_selectedAssignees.Contains(a)).ToList();
-            var maxToAdd = 3 - _selectedAssignees.Count;
+            var maxToAdd = _limitsConfig.MaxAssigneesPerContract - _selectedAssignees.Count;
             selectEmployeesScreen.Open().Forget();
             selectEmployeesScreen.Init(available, maxToAdd);
         }

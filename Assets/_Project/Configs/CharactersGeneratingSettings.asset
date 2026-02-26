@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22f87446f0e4d4d4c967db28d7289ec4, type: 3}
+  m_Name: CharactersGeneratingSettings
+  m_EditorClassIdentifier: 
+  _salaries:
+  - CharacterSkill: 1
+    SalaryRange: {x: 500, y: 1000}
+    AgeRange: {x: 18, y: 24}
+  - CharacterSkill: 2
+    SalaryRange: {x: 1000, y: 1500}
+    AgeRange: {x: 18, y: 26}
+  - CharacterSkill: 3
+    SalaryRange: {x: 1500, y: 2000}
+    AgeRange: {x: 25, y: 30}
+  - CharacterSkill: 4
+    SalaryRange: {x: 3000, y: 5000}
+    AgeRange: {x: 30, y: 45}
+  _names:
+  - Vova
+  - Andrew
+  - Nikola
+  - Kristy

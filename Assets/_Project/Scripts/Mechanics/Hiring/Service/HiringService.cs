@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Core.Scripts.Extension.System;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.Config;
 using Mechanics.Hiring.Data;
 using PimDeWitte.UnityMainThreadDispatcher;
 using Zenject;
@@ -12,37 +13,34 @@ namespace Mechanics.Hiring.Service
 {
     public class HiringService : IHiringService
     {
-        private const int MAX_SPECIALISTS_CANDIDATES = 10;
-        
-        private readonly HiringSettingsJsonStorage _hiringSettingsJsonStorage = new();
-
-        private List<ICharacterData> _charactersToHire = new();
-        private CharactersGeneratingSettings _generatingSettings;
-        private ICompaniesService _companiesService;
-
+        private readonly List<ICharacterData> _charactersToHire = new();
+        private readonly ICompaniesService _companiesService;
+        private readonly HiringConfig _hiringConfig;
+        private readonly CharactersGeneratingSettings _generatingSettings;
+        private readonly ICharactersProvider _charactersProvider;
 
         private ICharacterData _myCharacterData;
-        private ICharactersProvider _charactersProvider;
-
 
         public event Action<ICharacterData> OnHired;
-        
+
         [Inject]
-        private void Construct(ICompaniesService companiesService, ICharactersProvider charactersProvider)
+        public HiringService(
+            ICompaniesService companiesService,
+            ICharactersProvider charactersProvider,
+            HiringConfig hiringConfig,
+            CharactersGeneratingSettings generatingSettings)
         {
-            _charactersProvider = charactersProvider;
             _companiesService = companiesService;
+            _charactersProvider = charactersProvider;
+            _hiringConfig = hiringConfig;
+            _generatingSettings = generatingSettings;
         }
 
         public async Task Init()
         {
-            await UnityMainThreadDispatcher.Instance().EnqueueAsync(() =>_hiringSettingsJsonStorage.Load());
-
             _myCharacterData = _charactersProvider.GetMyCharacter();
-
-            _generatingSettings = _hiringSettingsJsonStorage.Get();
-
-            _charactersToHire = GenerateAvailableCharactersToHire();
+            _charactersToHire.Clear();
+            _charactersToHire.AddRange(GenerateAvailableCharactersToHire());
         }
 
         public void Hire(ICharacterData characterData)
@@ -64,7 +62,7 @@ namespace Mechanics.Hiring.Service
         public List<ICharacterData> GenerateAvailableCharactersToHire()
         {
             List<ICharacterData> result = new();
-            var generateAmount = MAX_SPECIALISTS_CANDIDATES;
+            var generateAmount = _hiringConfig.MaxCandidatesCount;
             var crewRoles = GetCrewRoles();
 
             var peacefulRoles = GetPeacefulRoles();

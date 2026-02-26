@@ -7,7 +7,7 @@ using Core.Scripts.Extension.System;
 using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.CompaniesRating.Data;
-using Mechanics.CompaniesRating.Json;
+using Mechanics.Config;
 using Mechanics.DataSettings;
 using Mechanics.Hiring.Data;
 using Mechanics.Product;
@@ -16,15 +16,21 @@ namespace Mechanics.CompaniesRating.Generator
 {
     public class CompaniesRatingGenerator : ICompaniesRatingGenerator
     {
-        private CompaniesGeneratingSettingsJsonStorage _companiesGeneratingSettingsJsonStorage;
         private CompaniesGeneratingSettings _settings;
         private CharactersGeneratingSettings _charactersGeneratingSettings;
         private ProductsGeneratingSettings _productsGeneratingSettings;
+        private readonly ContractProductLimitsConfig _productLimitsConfig;
         private List<ICompanyData> _companies;
 
         public IEnumerable<ICompanyData> GeneratedCompanies => _companies;
 
-        public async Task Init(CompaniesGeneratingSettings companiesGeneratingSettings,CharactersGeneratingSettings charactersGeneratingSettings, ProductsGeneratingSettings productsGeneratingSettings)
+        [Zenject.Inject]
+        public CompaniesRatingGenerator(ContractProductLimitsConfig productLimitsConfig)
+        {
+            _productLimitsConfig = productLimitsConfig;
+        }
+
+        public async Task Init(CompaniesGeneratingSettings companiesGeneratingSettings, CharactersGeneratingSettings charactersGeneratingSettings, ProductsGeneratingSettings productsGeneratingSettings)
         {
             _settings = companiesGeneratingSettings;
             _productsGeneratingSettings = productsGeneratingSettings;
@@ -152,7 +158,8 @@ namespace Mechanics.CompaniesRating.Generator
                 .Names
                 .PickRandom();
 
-            var contract = ContractData.Create(Guid.NewGuid().ToString(), name, null, 50f, 5f, 3f);
+            var contract = ContractData.Create(Guid.NewGuid().ToString(), name, null,
+                _productLimitsConfig.DefaultRewardAmount, _productLimitsConfig.DefaultReputationReward, _productLimitsConfig.DefaultHeatReward);
             contract.ContractState = ContractState.Completed;
             result.Add(contract);
 

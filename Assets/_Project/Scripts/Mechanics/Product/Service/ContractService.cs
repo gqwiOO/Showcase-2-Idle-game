@@ -5,6 +5,7 @@ using Core.Scripts.Extension.System;
 using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.Config;
 using Mechanics.GameSave;
 using Mechanics.Income;
 using Mechanics.Product.JSON;
@@ -17,24 +18,27 @@ namespace Mechanics.Product
     public class ContractService : IContractService, IInitializable
     {
         private ProductNamesJsonStorage _jsonNamesStorage;
-        private ICharactersProvider _charactersProvider;
-        private IContractsProvider _contractsProvider;
-        private IGameEconomyService _gameEconomyService;
+        private readonly ICharactersProvider _charactersProvider;
+        private readonly IContractsProvider _contractsProvider;
+        private readonly IGameEconomyService _gameEconomyService;
+        private readonly ContractExecutionConfig _executionConfig;
 
         private List<IContractData> _contractsInExecution = new();
-
-        private const int BaseExecutionTimeSeconds = 60;
 
         public event Action<IContractData> OnContractTaken;
         public event Action<ContractCompletionResult> OnContractCompleted;
 
         [Inject]
-        private void Construct(ICharactersProvider charactersProvider, IContractsProvider contractsProvider,
-            IGameEconomyService gameEconomyService)
+        public ContractService(
+            ICharactersProvider charactersProvider,
+            IContractsProvider contractsProvider,
+            IGameEconomyService gameEconomyService,
+            ContractExecutionConfig executionConfig)
         {
-            _gameEconomyService = gameEconomyService;
-            _contractsProvider = contractsProvider;
             _charactersProvider = charactersProvider;
+            _contractsProvider = contractsProvider;
+            _gameEconomyService = gameEconomyService;
+            _executionConfig = executionConfig;
         }
 
         public void Initialize()
@@ -130,9 +134,9 @@ namespace Mechanics.Product
 
         private float GetExecutionSpeedInSeconds(IContractData contractData)
         {
-            float result = BaseExecutionTimeSeconds;
+            float result = _executionConfig.BaseExecutionTimeSeconds;
             foreach (var assignee in contractData.ExecutionData.Developers)
-                result -= result / 100 * GetAssigneeTimeBoost(assignee);
+                result -= result / 100 * _executionConfig.GetTimeBoostPercent(assignee.CharacterSkill);
             return result;
         }
 
@@ -146,16 +150,5 @@ namespace Mechanics.Product
                 .Name;
         }
 
-        private float GetAssigneeTimeBoost(ICharacterData characterData)
-        {
-            switch (characterData.CharacterSkill)
-            {
-                case CharacterSkill.Beginner: return 5f;
-                case CharacterSkill.Intermediate: return 8f;
-                case CharacterSkill.Advanced: return 15f;
-                case CharacterSkill.Expert: return 20f;
-                default: return 0f;
-            }
-        }
     }
 }

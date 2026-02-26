@@ -4,6 +4,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.Config;
 using Mechanics.Developing.Data;
 using Services.Screen;
 using TMPro;
@@ -13,7 +14,7 @@ using Zenject;
 
 namespace Mechanics.Product
 {
-    public class CreateProductScreen: BaseScreen
+    public class CreateProductScreen : BaseScreen
     {
         [Header("Buttons")]
         [SerializeField] 
@@ -49,18 +50,18 @@ namespace Mechanics.Product
         private ICharactersProvider _charactersProvider;
         private ICompaniesService _companiesService;
         private ICompaniesProvider _companiesProvider;
-
-        private const int MAX_DEVELOPERS_ON_PROJECT = 3;
-
+        private ContractProductLimitsConfig _limitsConfig;
 
         [Inject]
-        private void Construct(IContractService contractService, ICharactersProvider charactersProvider, ICompaniesService companiesService,
-            ICompaniesProvider companiesProvider)
+        private void Construct(IContractService contractService, ICharactersProvider charactersProvider,
+            ICompaniesService companiesService, ICompaniesProvider companiesProvider,
+            ContractProductLimitsConfig limitsConfig)
         {
             _companiesProvider = companiesProvider;
             _companiesService = companiesService;
             _charactersProvider = charactersProvider;
             _contractService = contractService;
+            _limitsConfig = limitsConfig;
         }
 
         public async UniTask Init()
@@ -92,7 +93,7 @@ namespace Mechanics.Product
         private void AddDeveloperButton_OnClicked()
         {
             selectEmployeesScreen.Open().Forget();
-            selectEmployeesScreen.Init(GetNotSelectedEmployeesOnProduct(), MAX_DEVELOPERS_ON_PROJECT - _currentSelectedEmployees.Count);
+            selectEmployeesScreen.Init(GetNotSelectedEmployeesOnProduct(), _limitsConfig.MaxDevelopersOnProject - _currentSelectedEmployees.Count);
         }
 
         private List<ICharacterData> GetNotSelectedEmployeesOnProduct()
@@ -137,7 +138,9 @@ namespace Mechanics.Product
                 Guid.NewGuid().ToString(),
                 _nameText.text,
                 new DevelopingData(_currentSelectedEmployees.Select(item => (CharacterData)item).ToList()),
-                rewardAmount: 50f);
+                _limitsConfig.DefaultRewardAmount,
+                _limitsConfig.DefaultReputationReward,
+                _limitsConfig.DefaultHeatReward);
 
             _contractService.TakeContract(contract, _myCharacter.Key);
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mechanics.Characters;
+using Mechanics.Config;
 using Mechanics.Developing.Data;
 using Mechanics.DayNight;
 using Mechanics.Income;
@@ -15,34 +16,34 @@ namespace Mechanics.Product
 {
     public class ContractMarketService : IContractMarketService
     {
-        private const int OffersPerNight = 6;
-        private const float Tier2ReputationRequired = 50f;
-        private const float Tier3ReputationRequired = 120f;
-        private const float PenaltyHeatBase = 5f;
-        private const float InjuryChanceBase = 0.25f;
-
         private List<ContractData> _currentOffers = new();
         private HashSet<string> _contractsTakenThisNight = new();
 
-        private IGameTimeService _gameTimeService;
-        private IGameEconomyService _gameEconomyService;
-        private IContractService _contractService;
-        private IContractsProvider _contractsProvider;
-        private ICharactersProvider _charactersProvider;
+        private readonly IGameTimeService _gameTimeService;
+        private readonly IGameEconomyService _gameEconomyService;
+        private readonly IContractService _contractService;
+        private readonly IContractsProvider _contractsProvider;
+        private readonly ICharactersProvider _charactersProvider;
+        private readonly ContractMarketConfig _config;
 
         public event Action OnOffersRefreshed;
         public event Action OnOfferTaken;
 
         [Inject]
-        private void Construct(IGameTimeService gameTimeService, IGameEconomyService gameEconomyService,
-            IContractService contractService, IContractsProvider contractsProvider,
-            ICharactersProvider charactersProvider)
+        public ContractMarketService(
+            IGameTimeService gameTimeService,
+            IGameEconomyService gameEconomyService,
+            IContractService contractService,
+            IContractsProvider contractsProvider,
+            ICharactersProvider charactersProvider,
+            ContractMarketConfig config)
         {
             _gameTimeService = gameTimeService;
             _gameEconomyService = gameEconomyService;
             _contractService = contractService;
             _contractsProvider = contractsProvider;
             _charactersProvider = charactersProvider;
+            _config = config;
         }
 
         public async Task Init()
@@ -67,7 +68,7 @@ namespace Mechanics.Product
 
         private void RefreshOffers()
         {
-            _currentOffers = GenerateOffers(OffersPerNight);
+            _currentOffers = GenerateOffers(_config.OffersPerNight);
             OnOffersRefreshed?.Invoke();
         }
 
@@ -87,7 +88,7 @@ namespace Mechanics.Product
                 var random = new Random();
                 var type = types[random.Next(0, types.Length)];
                 var requiredRoles = PickRequiredRoles(roles);
-                var (reward, rep, heat) = GetRewardsByTier(tier);
+                var rewards = _config.GetRewardsByTier(tier);
 
                 var offer = ContractData.CreateOffer(
                     Guid.NewGuid().ToString(),
@@ -95,11 +96,11 @@ namespace Mechanics.Product
                     type,
                     tier,
                     requiredRoles,
-                    reward,
-                    rep,
-                    heat,
-                    PenaltyHeatBase * (int)tier,
-                    InjuryChanceBase
+                    rewards.Reward,
+                    rewards.Reputation,
+                    rewards.Heat,
+                    _config.PenaltyHeatBase * (int)tier,
+                    _config.InjuryChanceBase
                 );
                 result.Add(offer);
             }
@@ -110,33 +111,19 @@ namespace Mechanics.Product
         private ContractTier PickTier()
         {
             var r = new Random().NextDouble();
-            // var r = UnityEngine.Random.value;
-            if (IsTierUnlocked(ContractTier.Tier3) && r < 0.2f) return ContractTier.Tier3;
-            if (IsTierUnlocked(ContractTier.Tier2) && r < 0.5f) return ContractTier.Tier2;
+            if (IsTierUnlocked(ContractTier.Tier3) && r < _config.Tier3Weight) return ContractTier.Tier3;
+            if (IsTierUnlocked(ContractTier.Tier2) && r < _config.Tier2Weight) return ContractTier.Tier2;
             return ContractTier.Tier1;
         }
 
         private List<RoleType> PickRequiredRoles(RoleType[] roles)
         {
-            Random random = new Random();
-            var count = random.Next(1, 4);
-            // var count = UnityEngine.Random.Range(1, 4);
+            var random = new Random();
+            var count = random.Next(_config.RequiredRolesMin, _config.RequiredRolesMax);
             var result = new List<RoleType>();
             for (int i = 0; i < count; i++)
-                // result.Add(roles[UnityEngine.Random.Range(0, roles.Length)]);
-                result.Add(roles[random.Next(0,roles.Length)]);
+                result.Add(roles[random.Next(0, roles.Length)]);
             return result;
-        }
-
-        private (float reward, float rep, float heat) GetRewardsByTier(ContractTier tier)
-        {
-            return tier switch
-            {
-                ContractTier.Tier1 => (50f, 5f, 3f),
-                ContractTier.Tier2 => (120f, 12f, 6f),
-                ContractTier.Tier3 => (250f, 25f, 10f),
-                _ => (50f, 5f, 3f)
-            };
         }
 
         public IReadOnlyList<IContractData> GetAvailableOffers()
@@ -178,8 +165,8 @@ namespace Mechanics.Product
             return tier switch
             {
                 ContractTier.Tier1 => true,
-                ContractTier.Tier2 => rep >= Tier2ReputationRequired,
-                ContractTier.Tier3 => rep >= Tier3ReputationRequired,
+                ContractTier.Tier2 => rep >= _config.Tier2ReputationRequired,
+                ContractTier.Tier3 => rep >= _config.Tier3ReputationRequired,
                 _ => false
             };
         }

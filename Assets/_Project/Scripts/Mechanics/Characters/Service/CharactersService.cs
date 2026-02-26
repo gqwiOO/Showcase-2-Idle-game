@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Mechanics.Companies;
+using Mechanics.Config;
 using Mechanics.GameSave;
 using Mechanics.Product;
 using Zenject;
@@ -8,27 +9,33 @@ namespace Mechanics.Characters
 {
     public class CharactersService : ICharactersService
     {
-        private ICharactersProvider _charactersProvider;
-        private ICompaniesProvider _companiesProvider;
-
-        private IGameSaveService _gameSaveService;
+        private readonly ICharactersProvider _charactersProvider;
+        private readonly ICompaniesProvider _companiesProvider;
+        private readonly IGameSaveService _gameSaveService;
+        private readonly DefaultPlayerConfig _defaultPlayerConfig;
 
         [Inject]
-        private void Construct(ICharactersProvider charactersProvider, ICompaniesProvider companiesProvider, IGameSaveService gameSaveService)
+        public CharactersService(
+            ICharactersProvider charactersProvider,
+            ICompaniesProvider companiesProvider,
+            IGameSaveService gameSaveService,
+            DefaultPlayerConfig defaultPlayerConfig)
         {
-            _gameSaveService = gameSaveService;
-            _companiesProvider = companiesProvider;
             _charactersProvider = charactersProvider;
+            _companiesProvider = companiesProvider;
+            _gameSaveService = gameSaveService;
+            _defaultPlayerConfig = defaultPlayerConfig;
         }
 
         public async Task Init()
         {
-            if(_gameSaveService.IsGameLoaded())
+            if (_gameSaveService.IsGameLoaded())
                 _charactersProvider.AddMyCharacter(_gameSaveService.MyCharacter);
             else
             {
-                var characterData = new CharacterData("l2fx6", 18, RoleType.Handler, PeacefulRoleType.Manager, 0,
-                    string.Empty, CharacterSkill.Expert);
+                var config = _defaultPlayerConfig;
+                var characterData = new CharacterData(config.Name, config.Age, config.Role, config.PeacefulRole,
+                    config.Salary, string.Empty, config.Skill);
                 _charactersProvider.AddMyCharacter(characterData);
             }
         }

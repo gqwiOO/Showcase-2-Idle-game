@@ -8,6 +8,7 @@ using Core.Scripts.Services.UpdateService;
 using Core.Storage.Bank;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.Config;
 using Mechanics.DayNight;
 using Zenject;
 
@@ -24,41 +25,42 @@ namespace Mechanics.Income
         private IDataBank<float> _heatBank;
         private ICharacterData _myCharacter;
 
-        private ICompaniesProvider _companiesProvider;
-        private ICharactersProvider _charactersProvider;
-        private IBanksProvidersProvider _banksProvidersProvider;
-        
-        private IUpdateService _updateService;
-        private ICompaniesService _companiesService;
-        private ICharacterCompanyListener _characterCompanyListener;
-        private IGameTimeService _gameTimeService;
+        private readonly ICompaniesProvider _companiesProvider;
+        private readonly ICharactersProvider _charactersProvider;
+        private readonly IBanksProvidersProvider _banksProvidersProvider;
+        private readonly IUpdateService _updateService;
+        private readonly ICompaniesService _companiesService;
+        private readonly ICharacterCompanyListener _characterCompanyListener;
+        private readonly IGameTimeService _gameTimeService;
+        private readonly GameEconomyConfig _economyConfig;
 
         public event Action OnMyPlayerIncomeChanged;
-
         public event Action<float> OnPlayerBalanceChanged;
-
         public event Action<float> OnCleanBalanceChanged;
-
         public event Action<float> OnDirtyBalanceChanged;
         public event Action<float> OnReputationChanged;
         public event Action<float> OnHeatChanged;
-
         public UpdateType UpdateType => UpdateType.Update;
 
-
         [Inject]
-        private void Construct(ICompaniesProvider companiesProvider, ICharactersProvider charactersProvider,
-            IBanksProvidersProvider banksProvidersProvider, IUpdateService updateService, ICompaniesService companiesService,
+        public GameEconomyService(
+            ICompaniesProvider companiesProvider,
+            ICharactersProvider charactersProvider,
+            IBanksProvidersProvider banksProvidersProvider,
+            IUpdateService updateService,
+            ICompaniesService companiesService,
             ICharacterCompanyListener characterCompanyListener,
-            IGameTimeService gameTimeService)
+            IGameTimeService gameTimeService,
+            GameEconomyConfig economyConfig)
         {
-            _gameTimeService = gameTimeService;
-            _characterCompanyListener = characterCompanyListener;
-            _companiesService = companiesService;
-            _updateService = updateService;
-            _banksProvidersProvider = banksProvidersProvider;
-            _charactersProvider = charactersProvider;
             _companiesProvider = companiesProvider;
+            _charactersProvider = charactersProvider;
+            _banksProvidersProvider = banksProvidersProvider;
+            _updateService = updateService;
+            _companiesService = companiesService;
+            _characterCompanyListener = characterCompanyListener;
+            _gameTimeService = gameTimeService;
+            _economyConfig = economyConfig;
         }
 
         public async Task Init()
@@ -207,8 +209,8 @@ namespace Mechanics.Income
             return result;
         }
 
-        private static float ConvertMonthValueIntoTick(float incomePerMonth) 
-            => incomePerMonth / 120;
+        private float ConvertMonthValueIntoTick(float incomePerMonth) 
+            => incomePerMonth / _economyConfig.TicksPerMonth;
 
         public void Tick(float tickTime)
         {
