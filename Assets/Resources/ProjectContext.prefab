@@ -253,6 +253,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 514921083644137384}
+  - {fileID: 5308247811107080156}
   m_Father: {fileID: 4471502261058542949}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7536521565209965790
@@ -268,6 +269,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _installers:
+  - {fileID: 5469338220172331122}
   - {fileID: 7522982163625417275}
 --- !u!1 &2231171314215299849
 GameObject:
@@ -492,6 +494,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d750084d333d43a4b4443ff8b1d7c3d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4701852167956882753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5308247811107080156}
+  - component: {fileID: 5469338220172331122}
+  m_Layer: 0
+  m_Name: GameConfigInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5308247811107080156
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4701852167956882753}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 198885746936910699}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5469338220172331122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4701852167956882753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ba624de47a45b45b4d6f2c5c5ef9e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _economyConfig: {fileID: 11400000, guid: e125ec9aa9d436d408cc48307152a16e, type: 2}
+  _contractMarketConfig: {fileID: 11400000, guid: 4370cf60f3ddc7b4ca0f9362c0b62896, type: 2}
+  _contractExecutionConfig: {fileID: 11400000, guid: ce155c6714adea24d8a6288f862e5db1, type: 2}
+  _hiringConfig: {fileID: 11400000, guid: 7b656e3a8f60b8942822579864355d8a, type: 2}
+  _defaultPlayerConfig: {fileID: 11400000, guid: d7d9c117671d9224e97b2116c3f93ae3, type: 2}
+  _contractProductLimitsConfig: {fileID: 11400000, guid: 797c292fde6b7a342a0b227cdf248628, type: 2}
+  _charactersGeneratingSettings: {fileID: 11400000, guid: b9c24ab8ca6c5af4bb2e54e933f84a22, type: 2}
+  _companiesGeneratingSettings: {fileID: 11400000, guid: 6565b2463c332c3469260649e6cb9226, type: 2}
+  _productsGeneratingSettings: {fileID: 11400000, guid: ce8bde8b55524a14384538aa2e251845, type: 2}
 --- !u!1 &5647794769773596404
 GameObject:
   m_ObjectHideFlags: 0
