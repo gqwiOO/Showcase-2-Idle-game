@@ -213,6 +213,15 @@ namespace Mechanics.Income
         public void Tick(float tickTime)
         {
             var addValue = GetIncomePerTick(tickTime, _myCharacter);
+            if (addValue < 0)
+            {
+                _cleanBank.Add(addValue);
+                OnPlayerBalanceChanged?.Invoke(_cleanBank.GetValue());
+                OnCleanBalanceChanged?.Invoke(_cleanBank.GetValue());
+                Debugging.Log(this, $"Salary paid from clean {addValue}");
+                return;
+            }
+
             if (_gameTimeService.CurrentPhase == DayNightPhase.Day)
             {
                 _cleanBank.Add(addValue);

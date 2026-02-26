@@ -18,12 +18,10 @@ namespace Mechanics.Product
         public ContractType Type { get; set; }
         public ContractTier Tier { get; set; }
 
-        [JsonProperty("_requiredRoles")]
         public List<RoleType> RequiredRoles { get; set; } = new();
 
         IReadOnlyList<RoleType> IContractData.RequiredRoles => RequiredRoles;
 
-        [JsonProperty("IncomePerMonth")]
         public float RewardAmount { get; set; }
 
         public float ReputationReward { get; set; } = 5f;
@@ -36,12 +34,11 @@ namespace Mechanics.Product
         [JsonIgnore]
         IDevelopingData IContractData.ExecutionData => _executionData;
 
-        [JsonProperty("_developingData")]
         public DevelopingData _executionData { get; set; }
 
         [JsonConstructor]
         public ContractData(string key, string name, float rewardAmount,
-            [JsonProperty("ProductState")] ContractState contractState = ContractState.Executing)
+            ContractState contractState = ContractState.Executing)
         {
             Key = key;
             Name = name;

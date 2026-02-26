@@ -75,7 +75,11 @@ namespace Mechanics.Product
         {
             var result = new List<ContractData>();
             var types = Enum.GetValues(typeof(ContractType)).Cast<ContractType>().Where(t => t != ContractType.None).ToArray();
-            var roles = new[] { RoleType.Developer, RoleType.ArtDesigner };
+            var roles = new[]
+            {
+                RoleType.Assassin, RoleType.Handler, RoleType.Analyst, RoleType.Driver,
+                RoleType.Medic, RoleType.Cleaner, RoleType.Gunsmith, RoleType.Technician
+            };
 
             for (int i = 0; i < count; i++)
             {
@@ -137,6 +141,9 @@ namespace Mechanics.Product
 
         public IReadOnlyList<IContractData> GetAvailableOffers()
         {
+            if (_gameTimeService.CurrentPhase != DayNightPhase.Night)
+                return new List<IContractData>();
+
             return _currentOffers
                 .Where(o => IsTierUnlocked(o.Tier))
                 .Cast<IContractData>()
@@ -145,11 +152,15 @@ namespace Mechanics.Product
 
         public bool CanTakeOffer(IContractData offer)
         {
+            if (_gameTimeService.CurrentPhase != DayNightPhase.Night)
+                return false;
             return offer != null && _currentOffers.Contains((ContractData)offer) && IsTierUnlocked(offer.Tier);
         }
 
         public void TakeOffer(IContractData offer, List<ICharacterData> assignees, string ownerKey)
         {
+            if (_gameTimeService.CurrentPhase != DayNightPhase.Night)
+                return;
             var offerData = (ContractData)offer;
             if (!_currentOffers.Remove(offerData)) return;
 

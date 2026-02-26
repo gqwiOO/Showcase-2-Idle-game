@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using ModestTree;
-using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Mechanics.Characters
@@ -9,10 +8,12 @@ namespace Mechanics.Characters
     [Serializable]
     public class CharacterData : ICharacterData
     {
-        public CharacterData(string name, int age, RoleType role, int salary, string companyId, CharacterSkill characterSkill)
+        public CharacterData(string name, int age, RoleType blackRole, PeacefulRoleType peacefulRole, int salary,
+            string companyId, CharacterSkill characterSkill)
         {
             Age = age;
-            Role = role;
+            BlackRole = blackRole;
+            PeacefulRole = peacefulRole;
             Salary = salary;
             CompanyKey = companyId;
             CharacterSkill = characterSkill;
@@ -30,7 +31,10 @@ namespace Mechanics.Characters
         public int Age { get; set; }
 
         [field: SerializeField]
-        public RoleType Role { get; set; }
+        public RoleType BlackRole { get; set; }
+
+        [field: SerializeField]
+        public PeacefulRoleType PeacefulRole { get; set; }
 
         [field: SerializeField]
         public CharacterSkill CharacterSkill { get; set; }

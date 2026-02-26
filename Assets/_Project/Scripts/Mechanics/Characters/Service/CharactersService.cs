@@ -27,16 +27,19 @@ namespace Mechanics.Characters
                 _charactersProvider.AddMyCharacter(_gameSaveService.MyCharacter);
             else
             {
-                var characterData = new CharacterData("l2fx6", 18, RoleType.Developer, 0, string.Empty,
-                    CharacterSkill.Expert);
+                var characterData = new CharacterData("l2fx6", 18, RoleType.Handler, PeacefulRoleType.Manager, 0,
+                    string.Empty, CharacterSkill.Expert);
                 _charactersProvider.AddMyCharacter(characterData);
             }
         }
 
         public void InjectGameSave(GameData gameSave)
         {
+            var myCharacterKey = gameSave.MyCharacter?.Key;
             foreach (var gameSaveCharacter in gameSave.Characters)
             {
+                if (gameSaveCharacter.Key == myCharacterKey)
+                    continue;
                 _charactersProvider.AddCharacter(gameSaveCharacter);
             }
         }

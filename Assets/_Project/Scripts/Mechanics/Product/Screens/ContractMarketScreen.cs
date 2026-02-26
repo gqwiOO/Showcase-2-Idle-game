@@ -3,6 +3,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mechanics.Characters;
 using Mechanics.Companies;
+using Mechanics.DayNight;
 using Mechanics.Product.Provider;
 using Services.Screen;
 using Services.Screen.Interfaces;
@@ -16,6 +17,8 @@ namespace Mechanics.Product
 {
     public class ContractMarketScreen : BaseScreen
     {
+        private const string DayOnlyMessage = "You can execute contracts only at night time.";
+
         [SerializeField] private RectTransform _container;
         [SerializeField] private ContractMarketItemView _itemPrefab;
         [SerializeField] private TMP_Text _emptyText;
@@ -33,12 +36,13 @@ namespace Mechanics.Product
         private ICompaniesProvider _companiesProvider;
         private IContractsProvider _contractsProvider;
         private IMainScreenService _mainScreenService;
+        private IGameTimeService _gameTimeService;
 
         [Inject]
         private void Construct(IContractMarketService marketService, IContractService contractService,
             ICharactersProvider charactersProvider, ICompaniesService companiesService,
             ICompaniesProvider companiesProvider, IContractsProvider contractsProvider,
-            IMainScreenService mainScreenService)
+            IMainScreenService mainScreenService, IGameTimeService gameTimeService)
         {
             _marketService = marketService;
             _contractService = contractService;
@@ -47,6 +51,7 @@ namespace Mechanics.Product
             _companiesProvider = companiesProvider;
             _contractsProvider = contractsProvider;
             _mainScreenService = mainScreenService;
+            _gameTimeService = gameTimeService;
         }
 
         private void Awake()
@@ -84,6 +89,8 @@ namespace Mechanics.Product
             _marketService.OnOffersRefreshed += RefreshView;
             _marketService.OnOfferTaken += RefreshView;
             _contractService.OnContractCompleted += OnContractCompleted;
+            if (_gameTimeService != null)
+                _gameTimeService.OnPhaseChanged += OnPhaseChanged;
             RefreshView();
         }
 
@@ -92,7 +99,11 @@ namespace Mechanics.Product
             _marketService.OnOffersRefreshed -= RefreshView;
             _marketService.OnOfferTaken -= RefreshView;
             _contractService.OnContractCompleted -= OnContractCompleted;
+            if (_gameTimeService != null)
+                _gameTimeService.OnPhaseChanged -= OnPhaseChanged;
         }
+
+        private void OnPhaseChanged(DayNightPhase _) => RefreshView();
 
         private void OnContractCompleted(ContractCompletionResult _)
         {
@@ -110,10 +121,25 @@ namespace Mechanics.Product
 
         private void RefreshAvailableTab()
         {
+            bool isDay = _gameTimeService != null && _gameTimeService.CurrentPhase == DayNightPhase.Day;
+
+            if (isDay)
+            {
+                if (_emptyText != null)
+                {
+                    _emptyText.text = DayOnlyMessage;
+                    _emptyText.gameObject.SetActive(true);
+                }
+                HideExcessItems(0);
+                return;
+            }
+
             var offers = _marketService.GetAvailableOffers().ToList();
 
             if (_emptyText != null)
+            {
                 _emptyText.gameObject.SetActive(offers.Count == 0);
+            }
 
             EnsureItemCount(offers.Count);
 

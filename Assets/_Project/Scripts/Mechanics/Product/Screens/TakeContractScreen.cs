@@ -73,6 +73,8 @@ namespace Mechanics.Product
             if (_heatText != null) _heatText.text = $"+{offer.HeatReward}";
             if (_requiredRolesText != null)
                 _requiredRolesText.text = offer.RequiredRoles != null ? string.Join(", ", offer.RequiredRoles) : "";
+            
+            _takeButton.SetInteractableState(false);
         }
 
         private void OnAddAssigneeClicked()
@@ -87,12 +89,16 @@ namespace Mechanics.Product
         {
             _selectedAssignees.Add(character);
             _assigneesView.Add(character);
+            _takeButton.SetInteractableState(true);
         }
 
         private void OnAssigneeUnselected(ICharacterData character)
         {
             _selectedAssignees.Remove(character);
             _assigneesView.Remove(character);
+            
+            if(_selectedAssignees.Count == 0)
+                _takeButton.SetInteractableState(false);
         }
 
         private void OnTakeClicked()

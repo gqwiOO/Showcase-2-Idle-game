@@ -20,8 +20,7 @@ namespace Mechanics.Product
 
         private int _currentScreenSessionSelectedDevelopersCount = 0;
         private int _maxEmployeesToTake;
-
-
+        
         public event Action<ICharacterData> OnDeveloperSelected; 
         public void Init(List<ICharacterData> availableEmployees, int maxEmployeesToTake)
         {

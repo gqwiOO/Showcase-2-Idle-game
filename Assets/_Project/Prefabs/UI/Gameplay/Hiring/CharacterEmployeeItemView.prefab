@@ -431,6 +431,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8286617069479753563}
+  - component: {fileID: 647261475120860839}
   m_Layer: 5
   m_Name: Experience
   m_TagString: Untagged
@@ -458,6 +459,19 @@ RectTransform:
   m_AnchoredPosition: {x: 207, y: -0.000015259}
   m_SizeDelta: {x: 181.829, y: 75.6738}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &647261475120860839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4045580714184254927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82541d78495e4e239aa07fa20ffc0068, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _textField: {fileID: 6058136717860285065}
 --- !u!1 &4934875146726054832
 GameObject:
   m_ObjectHideFlags: 0
@@ -1218,6 +1232,7 @@ MonoBehaviour:
   _views:
   - {fileID: 4562880017025041310}
   - {fileID: 7039007421274733083}
+  - {fileID: 647261475120860839}
 --- !u!114 &5827467414551687207
 MonoBehaviour:
   m_ObjectHideFlags: 0

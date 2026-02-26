@@ -87,11 +87,14 @@ namespace Mechanics.CompaniesRating.Generator
                 CharacterSkill skill = CharacterSkill.Expert;
                 int employeeSalary = new Random().Next((int)settingsByTier.EmployeeSalary.x,(int)settingsByTier.EmployeeSalary.y);
                 
+                var blackRole = (RoleType)new Random().Next(1, Enum.GetNames(typeof(RoleType)).Length);
+                var peacefulRole = (PeacefulRoleType)new Random().Next(1, Enum.GetNames(typeof(PeacefulRoleType)).Length);
                 ICharacterData characterData = new CharacterData(
                     ListExtension.PickRandom(charactersNames),
-                    _charactersGeneratingSettings.GetAge(skill)
-                    ,RoleType.Developer,
-                        employeeSalary,
+                    _charactersGeneratingSettings.GetAge(skill),
+                    blackRole,
+                    peacefulRole,
+                    employeeSalary,
                     companyKey,
                     skill);
 
@@ -107,10 +110,13 @@ namespace Mechanics.CompaniesRating.Generator
         {
 
             CharacterSkill skill = CharacterSkill.Expert;
+            var blackRole = (RoleType)new Random().Next(1, Enum.GetNames(typeof(RoleType)).Length);
+            var peacefulRole = (PeacefulRoleType)new Random().Next(1, Enum.GetNames(typeof(PeacefulRoleType)).Length);
             ICharacterData characterData = new CharacterData(
                 ListExtension.PickRandom(names),
-                _charactersGeneratingSettings.GetAge(skill)
-                ,RoleType.Developer,
+                _charactersGeneratingSettings.GetAge(skill),
+                blackRole,
+                peacefulRole,
                 _charactersGeneratingSettings.GetSalary(skill),
                 "",
                 skill);

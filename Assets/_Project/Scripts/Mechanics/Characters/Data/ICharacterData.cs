@@ -7,7 +7,10 @@ namespace Mechanics.Characters
         public string Key { get; }
         public string Name { get; }
         public int Age { get; }
-        public RoleType Role { get; }
+        /// <summary>Black (night) vacancy - crew role for contracts.</summary>
+        public RoleType BlackRole { get; }
+        /// <summary>Peaceful (day) vacancy - hotel job.</summary>
+        public PeacefulRoleType PeacefulRole { get; }
         public CharacterSkill CharacterSkill { get; }
         public int Salary { get; }
         public string CompanyKey { get; }
@@ -29,10 +32,31 @@ namespace Mechanics.Characters
         void SetCompanyKey(string key);
     }
 
+    /// <summary>Black (night) role - crew specialty for contracts.</summary>
     public enum RoleType
     {
         None = 0,
-        Developer = 1,
-        ArtDesigner = 2,
+        Assassin = 1,
+        Handler = 2,
+        Analyst = 3,
+        Driver = 4,
+        Medic = 5,
+        Cleaner = 6,
+        Gunsmith = 7,
+        Technician = 8,
+    }
+
+    /// <summary>Peaceful (day) role - hotel job.</summary>
+    public enum PeacefulRoleType
+    {
+        None = 0,
+        Receptionist = 1,
+        Housekeeper = 2,
+        Concierge = 3,
+        Cook = 4,
+        Security = 5,
+        Maintenance = 6,
+        Waiter = 7,
+        Manager = 8,
     }
 }
