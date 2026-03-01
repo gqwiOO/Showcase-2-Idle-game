@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a9bd543afed8a24697ec74003337869, type: 3}
   m_Name: GameEconomyConfig
   m_EditorClassIdentifier: 
-  _ticksPerMonth: 120
+  _startMoney: 0
+  _ticksPerMonth:
+    _mode: 0
+    _constantValue: 120
+    _minValue: 120
+    _maxValue: 120

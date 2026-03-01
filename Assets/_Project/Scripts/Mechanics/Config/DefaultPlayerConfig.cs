@@ -8,17 +8,17 @@ namespace Mechanics.Config
     {
         [Header("New game defaults")]
         [SerializeField] private string _name = "l2fx6";
-        [SerializeField] private int _age = 18;
+        [SerializeField] private IntProperty _age = IntProperty.Constant(18);
         [SerializeField] private RoleType _role = RoleType.Handler;
         [SerializeField] private PeacefulRoleType _peacefulRole = PeacefulRoleType.Manager;
-        [SerializeField] private int _salary = 0;
+        [SerializeField] private IntProperty _salary = IntProperty.Constant(0);
         [SerializeField] private CharacterSkill _skill = CharacterSkill.Expert;
 
         public string Name => _name;
-        public int Age => _age;
+        public int Age => _age.Value;
         public RoleType Role => _role;
         public PeacefulRoleType PeacefulRole => _peacefulRole;
-        public int Salary => _salary;
+        public int Salary => _salary.Value;
         public CharacterSkill Skill => _skill;
     }
 }

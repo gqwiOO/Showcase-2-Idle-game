@@ -7,7 +7,7 @@ namespace Mechanics.Config
     public class ContractExecutionConfig : ScriptableObject
     {
         [Header("Duration")]
-        [SerializeField] private int _baseExecutionTimeSeconds = 60;
+        [SerializeField] private IntProperty _baseExecutionTimeSeconds = IntProperty.Constant(60);
 
         [Header("Time reduction % by skill")]
         [SerializeField] private float _beginnerTimeBoostPercent = 5f;
@@ -15,7 +15,7 @@ namespace Mechanics.Config
         [SerializeField] private float _advancedTimeBoostPercent = 15f;
         [SerializeField] private float _expertTimeBoostPercent = 20f;
 
-        public int BaseExecutionTimeSeconds => _baseExecutionTimeSeconds;
+        public int BaseExecutionTimeSeconds => _baseExecutionTimeSeconds.Value;
 
         public float GetTimeBoostPercent(CharacterSkill skill)
         {

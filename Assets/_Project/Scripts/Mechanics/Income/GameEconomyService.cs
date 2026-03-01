@@ -10,6 +10,7 @@ using Mechanics.Characters;
 using Mechanics.Companies;
 using Mechanics.Config;
 using Mechanics.DayNight;
+using Mechanics.GameSave;
 using Zenject;
 
 namespace Mechanics.Income
@@ -33,6 +34,7 @@ namespace Mechanics.Income
         private readonly ICharacterCompanyListener _characterCompanyListener;
         private readonly IGameTimeService _gameTimeService;
         private readonly GameEconomyConfig _economyConfig;
+        private readonly IGameSaveService _gameSaveService;
 
         public event Action OnMyPlayerIncomeChanged;
         public event Action<float> OnPlayerBalanceChanged;
@@ -51,7 +53,8 @@ namespace Mechanics.Income
             ICompaniesService companiesService,
             ICharacterCompanyListener characterCompanyListener,
             IGameTimeService gameTimeService,
-            GameEconomyConfig economyConfig)
+            GameEconomyConfig economyConfig,
+            IGameSaveService gameSaveService)
         {
             _companiesProvider = companiesProvider;
             _charactersProvider = charactersProvider;
@@ -61,6 +64,7 @@ namespace Mechanics.Income
             _characterCompanyListener = characterCompanyListener;
             _gameTimeService = gameTimeService;
             _economyConfig = economyConfig;
+            _gameSaveService = gameSaveService;
         }
 
         public async Task Init()
@@ -75,11 +79,14 @@ namespace Mechanics.Income
             _reputationBank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.Reputation);
             _heatBank = _banksProvidersProvider.GetFloatBankProvider().Get(BankId.Heat);
             _myCharacter = _charactersProvider.GetMyCharacter();
-            
+
+            if (!_gameSaveService.IsGameLoaded() && _economyConfig.StartMoney > 0f)
+                AddCleanMoney(_economyConfig.StartMoney);
+
             _characterCompanyListener.OnMyCharacterCompanyDataChanged += CharacterCompanyListenerOnOnMyCharacterCompanyDataChanged;
-            
+
             OnMyPlayerIncomeChanged?.Invoke();
-            
+
             _updateService.Add(this);
         }
 

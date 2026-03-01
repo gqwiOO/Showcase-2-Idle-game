@@ -85,13 +85,13 @@ namespace Mechanics.CompaniesRating.Generator
         {
             var result = new List<ICharacterData>();
 
-            var employeesCount = new System.Random().Next((int)settingsByTier.EmployeesCount.x,(int)settingsByTier.EmployeesCount.y);
+            var employeesCount = settingsByTier.EmployeesCount.Value;
             for (int i = 0; i < employeesCount; i++)
             {
                 // TODO : employees skill should not be always expert 
                 
                 CharacterSkill skill = CharacterSkill.Expert;
-                int employeeSalary = new Random().Next((int)settingsByTier.EmployeeSalary.x,(int)settingsByTier.EmployeeSalary.y);
+                int employeeSalary = settingsByTier.EmployeeSalary.Value;
                 
                 var blackRole = (RoleType)new Random().Next(1, Enum.GetNames(typeof(RoleType)).Length);
                 var peacefulRole = (PeacefulRoleType)new Random().Next(1, Enum.GetNames(typeof(PeacefulRoleType)).Length);
@@ -134,7 +134,7 @@ namespace Mechanics.CompaniesRating.Generator
         {
             var result = new List<IContractData>();
 
-            int contractsCount = new Random().Next((int)settings.ProductsCountRange.x, (int)settings.ProductsCountRange.y);
+            int contractsCount = settings.ProductsCountRange.Value;
 
             var random = new Random();
 

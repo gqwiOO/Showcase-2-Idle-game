@@ -6,8 +6,8 @@ namespace Mechanics.Config
     public class HiringConfig : ScriptableObject
     {
         [Header("Candidates")]
-        [SerializeField] private int _maxCandidatesCount = 10;
+        [SerializeField] private IntProperty _maxCandidatesCount = IntProperty.Constant(10);
 
-        public int MaxCandidatesCount => _maxCandidatesCount;
+        public int MaxCandidatesCount => _maxCandidatesCount.Value;
     }
 }

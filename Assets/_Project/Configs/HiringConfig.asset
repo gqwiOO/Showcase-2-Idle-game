@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761e8e7693987714187fb2a15f391110, type: 3}
   m_Name: HiringConfig
   m_EditorClassIdentifier: 
-  _maxCandidatesCount: 10
+  _maxCandidatesCount:
+    _mode: 0
+    _constantValue: 10
+    _minValue: 10
+    _maxValue: 10

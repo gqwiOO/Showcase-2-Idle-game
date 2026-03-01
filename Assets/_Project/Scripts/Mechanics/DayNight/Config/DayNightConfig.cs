@@ -1,3 +1,4 @@
+using Mechanics.Config;
 using UnityEngine;
 
 namespace Mechanics.DayNight
@@ -11,27 +12,27 @@ namespace Mechanics.DayNight
 
         [Header("Day")]
         [Tooltip("Day start hour (0-23)")]
-        [SerializeField] private int _dayStartHour = 7;
+        [SerializeField] private IntProperty _dayStartHour = IntProperty.Constant(7);
 
         [Tooltip("Day end hour (exclusive, 22 means day ends at 22:00)")]
-        [SerializeField] private int _dayEndHour = 22;
+        [SerializeField] private IntProperty _dayEndHour = IntProperty.Constant(22);
 
         [Header("Night")]
         [Tooltip("Night start hour (22)")]
-        [SerializeField] private int _nightStartHour = 22;
+        [SerializeField] private IntProperty _nightStartHour = IntProperty.Constant(22);
 
         [Tooltip("Night end hour (7, next day)")]
-        [SerializeField] private int _nightEndHour = 7;
+        [SerializeField] private IntProperty _nightEndHour = IntProperty.Constant(7);
 
         public float SecondsPerGameHour => _secondsPerGameHour;
-        public int DayStartHour => _dayStartHour;
-        public int DayEndHour => _dayEndHour;
-        public int NightStartHour => _nightStartHour;
-        public int NightEndHour => _nightEndHour;
+        public int DayStartHour => _dayStartHour.Value;
+        public int DayEndHour => _dayEndHour.Value;
+        public int NightStartHour => _nightStartHour.Value;
+        public int NightEndHour => _nightEndHour.Value;
 
-        public int DayDurationHours => _dayEndHour - _dayStartHour;
-        public int NightDurationHours => _nightEndHour > _nightStartHour
-            ? 24 - _nightStartHour + _nightEndHour
-            : _nightEndHour - _nightStartHour;
+        public int DayDurationHours => _dayEndHour.Value - _dayStartHour.Value;
+        public int NightDurationHours => _nightEndHour.Value > _nightStartHour.Value
+            ? 24 - _nightStartHour.Value + _nightEndHour.Value
+            : _nightEndHour.Value - _nightStartHour.Value;
     }
 }

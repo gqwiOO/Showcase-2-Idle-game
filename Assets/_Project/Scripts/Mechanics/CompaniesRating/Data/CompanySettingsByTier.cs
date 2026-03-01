@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Mechanics.Config;
 using UnityEngine;
 
 namespace Mechanics.CompaniesRating.Data
@@ -7,10 +8,9 @@ namespace Mechanics.CompaniesRating.Data
     public class CompanySettingsByTier
     {
         public CompanyTier CompanyTier;
-        public Vector2 EmployeesCount;
-        public Vector2 EmployeeSalary;
-        public Vector2 ProductsCountRange;
+        public IntProperty EmployeesCount;
+        public IntProperty EmployeeSalary;
+        public IntProperty ProductsCountRange;
         public Vector2 ProductIncomeRange;
-        
     }
 }

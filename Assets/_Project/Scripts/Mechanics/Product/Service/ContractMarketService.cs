@@ -119,7 +119,7 @@ namespace Mechanics.Product
         private List<RoleType> PickRequiredRoles(RoleType[] roles)
         {
             var random = new Random();
-            var count = random.Next(_config.RequiredRolesMin, _config.RequiredRolesMax);
+            var count = _config.RequiredRolesCount;
             var result = new List<RoleType>();
             for (int i = 0; i < count; i++)
                 result.Add(roles[random.Next(0, roles.Length)]);
