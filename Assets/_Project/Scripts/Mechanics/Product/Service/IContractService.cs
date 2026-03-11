@@ -8,6 +8,7 @@ namespace Mechanics.Product
     {
         event Action<IContractData> OnContractTaken;
         event Action<ContractCompletionResult> OnContractCompleted;
+        event Action<IContractData> OnContractFailed;
 
         void TakeContract(ContractData contract, string ownerKey);
         void TakeContract(ContractData contract, ICompanyData owner);

@@ -1,0 +1,17 @@
+---
+description: Unity MVC+Service architecture, Zenject, naming, no prefab/scene edits
+globs: "**/*.cs"
+alwaysApply: true
+---
+
+# Unity Project — Architecture & Code Rules
+
+**Full prompt and reference code:** see `UNITY_AI_PROMPT.md` in project root.
+
+- **MVC + Service:** Model = data; Service = business logic; Controller = UI events → Service; View = display only, UI events → Controller.
+- **Zenject:** `[Inject] private void Construct(IDependency d)`, bind interfaces in Installers. No prefab/scene edits.
+- **Naming:** `_camelCase` private fields, `camelCase` SerializeField, `PascalCase` properties; interfaces `I*`.
+- **Async:** UniTask for gameplay/Unity lifecycle. **Logging:** `Debugging.Log(this, msg)` / `Debugging.Error(this, msg)`.
+- **DRY:** move repeated logic up to shared service/base; keep one place to change. Keep it simple; avoid heavy LINQ.
+- **No comments** unless logic is non-obvious. **Odin:** SerializedMonoBehaviour when needed (e.g. dictionaries in inspector).
+- If unclear — ask; do not guess. Cite real project sources (files, classes).

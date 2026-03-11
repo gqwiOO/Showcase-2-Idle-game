@@ -27,6 +27,7 @@ namespace Mechanics.Product
 
         public event Action<IContractData> OnContractTaken;
         public event Action<ContractCompletionResult> OnContractCompleted;
+        public event Action<IContractData> OnContractFailed;
 
         [Inject]
         public ContractService(
